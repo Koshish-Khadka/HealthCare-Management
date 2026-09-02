@@ -34,6 +34,7 @@ model User {
   isActive  Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  doctor    doctor?
 }
 
 model Patient {
@@ -67,4 +68,21 @@ model Patient {
   user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt
+}
+
+model doctor {
+  id                  String   @id @default(uuid())
+  userId              Int      @unique
+  name                String
+  email               String   @unique
+  specialization      String
+  license_number      String
+  phone               String
+  address             String
+  department          String?
+  availability_status String?
+  job_type            String   @default("FULL")
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }

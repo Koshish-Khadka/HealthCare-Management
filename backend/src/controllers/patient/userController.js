@@ -1,4 +1,4 @@
-import { prisma } from "../config/prisma.js";
+import { prisma } from "../../config/prisma.js";
 
 export const onBoardPatient = async (req, res) => {
   try {
@@ -89,3 +89,26 @@ export const onBoardPatient = async (req, res) => {
     res.status(500).json({ message: "Failed to onboard patient" });
   }
 };
+
+export const getPatientProfile = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const patientData = await prisma.patient.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    if (!patientData) {
+      return res.status(404).json({ message: "Patient data not found" });
+    }
+    res.status(200).json({
+      message: "Patient data retrieved successfully",
+      patient: patientData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to get patient data" });
+  }
+};
+
+

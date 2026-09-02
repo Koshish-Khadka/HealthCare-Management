@@ -83,3 +83,55 @@ export const getUserSession = async (req, res) => {
     res.status(500).json({ message: "Failed to get user session" });
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+    req.session = null;
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to logout user" });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    // find the user
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // check if the current password is correct
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+    // hash the new password
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(newPassword, salt);
+
+    // update the password
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        password: hash,
+      },
+    });
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to change password" });
+  }
+};

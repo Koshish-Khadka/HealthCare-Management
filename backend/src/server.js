@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import authRoute from "./routes/authRoute.js";
-import patientRoute from "./routes/patientRoute.js";
+import userRoute from "./routes/patient/userRoute.js";
 
 const app = express();
 
@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 // routes
 app.use("/api/auth", authRoute);
-app.use("/api/patients", patientRoute);
+app.use("/api/patients", userRoute);
 
 app.get("/", (req, res) => {
   res.send("Backend is running");
