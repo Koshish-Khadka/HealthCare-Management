@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3000;
 // routes
 app.use("/api/auth", authRoute);
 
+
+
 app.get("/", (req, res) => {
   res.send("Backend is running");
 });
