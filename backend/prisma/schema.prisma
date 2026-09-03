@@ -23,6 +23,13 @@ enum Gender {
   FEMALE
 }
 
+enum AppointmentStatus {
+  PENDING
+  SCHEDULED
+  CANCELLED
+  COMPLETED
+}
+
 model User {
   id        Int        @id @default(autoincrement())
   username  String     @unique
@@ -38,14 +45,14 @@ model User {
 }
 
 model Patient {
-  id                       String   @id @default(uuid())
-  userId                   Int      @unique
+  id                       String        @id @default(uuid())
+  userId                   Int           @unique
   first_name               String
   last_name                String
   date_of_birth            DateTime
-  gender                   Gender   @default(MALE)
+  gender                   Gender        @default(MALE)
   phone                    String
-  email                    String   @unique
+  email                    String        @unique
   marital_status           String
   address                  String
   emergency_contact_name   String
@@ -62,27 +69,54 @@ model Patient {
   medical_consent          Boolean
   img                      String?
   colorCode                String?
-  isOnboarded              Boolean  @default(false)
-  created_at               DateTime @default(now())
-  updated_at               DateTime @updatedAt
-  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime @updatedAt
+  isOnboarded              Boolean       @default(false)
+  created_at               DateTime      @default(now())
+  updated_at               DateTime      @updatedAt
+  user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt                DateTime      @default(now())
+  updatedAt                DateTime      @updatedAt
+  appointments             Appointment[]
 }
 
 model doctor {
-  id                  String   @id @default(uuid())
-  userId              Int      @unique
+  id                  String        @id @default(uuid())
+  userId              Int           @unique
   name                String
-  email               String   @unique
+  email               String        @unique
   specialization      String
   license_number      String
   phone               String
   address             String
   department          String?
   availability_status String?
-  job_type            String   @default("FULL")
-  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  job_type            String        @default("FULL")
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  workingDays         WorkingDays[]
+  appointments        Appointment[]
+}
+
+model WorkingDays {
+  id         Int      @id @default(autoincrement())
+  doctor_id  String
+  day        String
+  start_time String
+  close_time String
+  doctor     doctor   @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  patient_id      String
+  doctor_id       String
+  appointmentDate DateTime
+  time            String
+  status          AppointmentStatus @default(PENDING)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  patient         Patient           @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+  doctor          doctor            @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
 }
