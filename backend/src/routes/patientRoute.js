@@ -5,6 +5,6 @@ import { getPatientProfile, onBoardPatient } from "../controllers/patientControl
 const router = express.Router();
 
 router.post("/onboard", isAuthenticated, onBoardPatient);
-router.get("/profile", isAuthenticated, getPatientProfile);
+router.get("/profile/:id", isAuthenticated, getPatientProfile);
 
 export default router;

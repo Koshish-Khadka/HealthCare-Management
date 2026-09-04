@@ -1,4 +1,4 @@
-import {prisma} from "../config/prisma.js"
+import { prisma } from "../config/prisma.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -133,5 +133,26 @@ export const changePassword = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Failed to change password" });
+  }
+};
+
+export const getMyProfile = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(404).json({ message: "User id not found" });
+    }
+    const profile = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    if (!profile) {
+      return res.status(404).json({ message: "No such profile found" });
+    }
+    res.status(200).json({ message: "Sucessfully fetched profile", profile });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to fetch profile data" });
   }
 };

@@ -1,6 +1,6 @@
-import {prisma} from "../config/prisma.js"
+import { prisma } from "../config/prisma.js";
 
-// doctor
+// view appointment by doctor
 export const viewDoctorAppointments = async (req, res) => {
   try {
     const doctorId = req.session.userId;
@@ -27,6 +27,7 @@ export const viewDoctorAppointments = async (req, res) => {
   }
 };
 
+// view appointment detail
 export const viewAppointmentById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -52,6 +53,7 @@ export const viewAppointmentById = async (req, res) => {
   }
 };
 
+// update appointment
 export const updateAppointment = async (req, res) => {
   try {
     const { status } = req.body;
@@ -87,42 +89,83 @@ export const updateAppointment = async (req, res) => {
   }
 };
 
-// patient
+// book appointment by patient
+// export const bookAppointment = async (req, res) => {
+//   try {
+//     const userId = req.session.userId;
+//     console.log("user id", userId);
+//     console.log("body", req.body);
+//     if (!userId) return res.status(404).json({ message: "User id not found" });
+
+//     const { doctor_id, appointmentDate, time } = req.body;
+//     if (!doctor_id || !appointmentDate || !time) {
+//       return res.status(404).json({ message: "All fields are required" });
+//     }
+
+//     const patientExists = await prisma.patient.findUnique({
+//       where: { userId: userId },
+//     });
+
+//     if (!patientExists) {
+//       return res.status(404).json({
+//         message: `Booking failed. Patient with ID ${userId} does not exist.`,
+//       });
+//     }
+
+//     // book apoointment to the doctor
+//     const appointment = await prisma.appointment.create({
+//       data: {
+//         patient_id: userId,
+//         doctor_id,
+//         appointmentDate,
+//         time,
+//       },
+//     });
+//     res
+//       .status(200)
+//       .json({ message: "Appointment created sucessfully", appointment });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Failed tp book appointment " });
+//   }
+// };
 
 export const bookAppointment = async (req, res) => {
   try {
+    const userId = req.session.userId;
+    if (!userId) return res.status(404).json({ message: "User id not found" });
+
     const { doctor_id, appointmentDate, time } = req.body;
     if (!doctor_id || !appointmentDate || !time) {
       return res.status(404).json({ message: "All fields are required" });
     }
-    const patient = await prisma.patient.findUnique({
-      where: {
-        userId,
-      },
+
+    const patientExists = await prisma.patient.findUnique({
+      where: { userId: userId },
     });
 
-    if (!patient) {
-      return res.status(400).json({
-        message: "Please complete your patient profile first",
+    if (!patientExists) {
+      return res.status(404).json({
+        message: `Booking failed. Patient profile for User ID ${userId} does not exist.`,
       });
     }
-    // check doctor availabilty for that date
 
-    // book apoointment to the doctor
+    // book appointment to the doctor
     const appointment = await prisma.appointment.create({
       data: {
-        patient_id: req.session.userId,
+        patient_id: patientExists.id, // the actual id should ne userId from req.session.userId
         doctor_id,
         appointmentDate,
         time,
       },
     });
+
     res
       .status(200)
-      .json({ message: "Appointment created sucessfully", appointment });
+      .json({ message: "Appointment created successfully", appointment });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Failed tp book appointment " });
+    res.status(500).json({ message: "Failed to book appointment " });
   }
 };
 
@@ -130,28 +173,60 @@ export const bookAppointment = async (req, res) => {
 export const viewallAppointments = async (req, res) => {
   try {
     const userId = req.session.userId;
+
     if (!userId) {
-      return res.status(404).json({ message: "User id not found" });
+      return res.status(401).json({
+        message: "User not authenticated",
+      });
     }
-    const appointment = await prisma.appointment.findMany({
+
+    // Find the patient profile belonging to the logged-in user
+    const patientExists = await prisma.patient.findUnique({
       where: {
-        patient_id: userId,
+        userId: userId,
       },
     });
-    if (!appointment) {
-      return res.status(404).json({ message: "No apoointment found till now" });
+
+    if (!patientExists) {
+      return res.status(404).json({
+        message: "Patient profile not found",
+      });
     }
-    res
-      .status(200)
-      .json({ message: "Sucessfully fetched all data of doctor", appointment });
+
+    // Find appointments using Patient.id
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        patient_id: patientExists.id,
+      },
+      include: {
+        doctor: true,
+        patient: true,
+      },
+      orderBy: {
+        appointmentDate: "desc",
+      },
+    });
+
+    if (appointments.length === 0) {
+      return res.status(404).json({
+        message: "No appointments found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Successfully fetched all appointments",
+      appointments,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Failed to fetch Apoointment " });
+
+    res.status(500).json({
+      message: "Failed to fetch appointments",
+    });
   }
 };
 
 // fetch all apoointment which status is completed that is history
-
 export const appointmentHistory = async (req, res) => {
   try {
     const appointment = await prisma.appointment.findMany({
@@ -170,29 +245,5 @@ export const appointmentHistory = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Failed to fetch appointment history " });
-  }
-};
-
-// view appointment detail by id
-export const appointmentDetailById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) return res.status(404).json({ message: "Id not found" });
-
-    // find the appointment
-    const appointment = await prisma.appointment.findFirst({
-      where: {
-        id,
-      },
-    });
-    if (!appointment) {
-      return res.status(404).json({ message: "Appointment not found" });
-    }
-    res
-      .status(200)
-      .json({ message: "Sucessfully fetched appointment detail", appointment });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Faield to get appointment detail by id" });
   }
 };

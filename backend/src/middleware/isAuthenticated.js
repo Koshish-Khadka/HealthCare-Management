@@ -18,10 +18,11 @@ export const isAuthenticated = async (req, res, next) => {
     // check user data
     const user = await prisma.user.findUnique({
       where: {
+        // id: session.userId,
         id: session.userId,
       },
     });
-    // console.log("user data", user);
+
     if (!user) return res.status(404).json({ message: "User not found" });
     req.session = session;
     next();
