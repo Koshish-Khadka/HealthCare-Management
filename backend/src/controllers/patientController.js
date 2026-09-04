@@ -1,5 +1,4 @@
-import { prisma } from "../../config/prisma.js";
-
+import { prisma } from "../config/prisma.js";
 export const onBoardPatient = async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -110,5 +109,3 @@ export const getPatientProfile = async (req, res) => {
     res.status(500).json({ message: "Failed to get patient data" });
   }
 };
-
-

@@ -1,9 +1,6 @@
 import express from "express";
-import {
-  getPatientProfile,
-  onBoardPatient,
-} from "../../controllers/patient/userController.js";
-import { isAuthenticated } from "../../middleware/isAuthenticated.js";
+import { isAuthenticated } from "../middleware/isAuthenticated.js";
+import { getPatientProfile, onBoardPatient } from "../controllers/patientController.js";
 
 const router = express.Router();
 
