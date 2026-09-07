@@ -4,12 +4,25 @@ import { prisma } from "../config/prisma.js";
 export const viewDoctorAppointments = async (req, res) => {
   try {
     const doctorId = req.session.userId;
+
     if (!doctorId) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
+    // check if the doctor exists
+    const doctor = await prisma.doctor.findFirst({
+      where: {
+        userId: doctorId,
+      },
+    });
+    if (!doctor) {
+      return res
+        .status(404)
+        .json({ message: "Doctor with that id does not exists" });
+    }
+
     const appointments = await prisma.appointment.findMany({
-      where: { doctorId },
+      where: { doctor_id: doctor.id },
       include: {
         patient: true,
       },
@@ -31,11 +44,14 @@ export const viewDoctorAppointments = async (req, res) => {
 export const viewAppointmentById = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("id", id);
     if (!id) {
       return res.status(400).json({ message: "Appointment ID is required" });
     }
     const appointment = await prisma.appointment.findUnique({
-      where: { id: parseInt(id) },
+      where: {
+        id: id,
+      },
       include: {
         patient: true,
         doctor: true,
@@ -56,11 +72,14 @@ export const viewAppointmentById = async (req, res) => {
 // update appointment
 export const updateAppointment = async (req, res) => {
   try {
+    const userId = req.session.userId;
     const { status } = req.body;
     const { id } = req.params;
 
-    if (!status || !id) {
-      return res.status(400).json({ message: "statusId and id is required" });
+    if (!status || !id || !userId) {
+      return res
+        .status(400)
+        .json({ message: "statusId , id and userID is required" });
     }
 
     const checkAppointment = await prisma.appointment.findUnique({
@@ -90,51 +109,11 @@ export const updateAppointment = async (req, res) => {
 };
 
 // book appointment by patient
-// export const bookAppointment = async (req, res) => {
-//   try {
-//     const userId = req.session.userId;
-//     console.log("user id", userId);
-//     console.log("body", req.body);
-//     if (!userId) return res.status(404).json({ message: "User id not found" });
-
-//     const { doctor_id, appointmentDate, time } = req.body;
-//     if (!doctor_id || !appointmentDate || !time) {
-//       return res.status(404).json({ message: "All fields are required" });
-//     }
-
-//     const patientExists = await prisma.patient.findUnique({
-//       where: { userId: userId },
-//     });
-
-//     if (!patientExists) {
-//       return res.status(404).json({
-//         message: `Booking failed. Patient with ID ${userId} does not exist.`,
-//       });
-//     }
-
-//     // book apoointment to the doctor
-//     const appointment = await prisma.appointment.create({
-//       data: {
-//         patient_id: userId,
-//         doctor_id,
-//         appointmentDate,
-//         time,
-//       },
-//     });
-//     res
-//       .status(200)
-//       .json({ message: "Appointment created sucessfully", appointment });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "Failed tp book appointment " });
-//   }
-// };
 
 export const bookAppointment = async (req, res) => {
   try {
     const userId = req.session.userId;
     if (!userId) return res.status(404).json({ message: "User id not found" });
-
     const { doctor_id, appointmentDate, time } = req.body;
     if (!doctor_id || !appointmentDate || !time) {
       return res.status(404).json({ message: "All fields are required" });
@@ -229,9 +208,21 @@ export const viewallAppointments = async (req, res) => {
 // fetch all apoointment which status is completed that is history
 export const appointmentHistory = async (req, res) => {
   try {
+    const userId = req.session.userId;
+    if (!userId) return res.status(404).json({ message: "User id not found" });
+
+    // find the user
+    const userExists = await prisma.patient.findFirst({
+      where: {
+        userId: userId,
+      },
+    });
+    if (!userExists)
+      return res.status(404).json({ message: "User does'nt exists" });
+
     const appointment = await prisma.appointment.findMany({
       where: {
-        patient_id: req.session.userId,
+        patient_id: userExists.id,
         status: "COMPLETED",
       },
     });
@@ -245,5 +236,75 @@ export const appointmentHistory = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Failed to fetch appointment history " });
+  }
+};
+
+export const cancelAppointment = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "User not authenticated",
+      });
+    }
+
+    const { appointmentId } = req.params;
+
+    if (!appointmentId) {
+      return res.status(400).json({
+        message: "Appointment ID is required",
+      });
+    }
+
+    // Find appointment belonging to the logged-in patient
+    const appointment = await prisma.appointment.findFirst({
+      where: {
+        id: appointmentId,
+        patient: {
+          userId: userId,
+        },
+      },
+    });
+
+    if (!appointment) {
+      return res.status(404).json({
+        message: "Appointment not found",
+      });
+    }
+
+    // Prevent cancellation of already cancelled/completed appointment
+    if (appointment.status === "CANCELLED") {
+      return res.status(400).json({
+        message: "Appointment is already cancelled",
+      });
+    }
+
+    if (appointment.status === "COMPLETED") {
+      return res.status(400).json({
+        message: "Completed appointments cannot be cancelled",
+      });
+    }
+
+    // Update appointment status
+    const cancelledAppointment = await prisma.appointment.update({
+      where: {
+        id: appointmentId,
+      },
+      data: {
+        status: "CANCELLED",
+      },
+    });
+
+    res.status(200).json({
+      message: "Appointment cancelled successfully",
+      appointment: cancelledAppointment,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to cancel appointment",
+    });
   }
 };

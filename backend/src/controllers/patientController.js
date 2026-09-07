@@ -95,7 +95,7 @@ export const onBoardPatient = async (req, res) => {
 export const getPatientProfile = async (req, res) => {
   try {
     // const userId = req.session.userId;
-    const userId = req.param;
+    const userId = req.session.userId;
     const patientData = await prisma.patient.findUnique({
       where: {
         userId: userId,
@@ -116,26 +116,26 @@ export const getPatientProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    // const {
-    //   first_name,
-    //   last_name,
-    //   date_of_birth,
-    //   gender,
-    //   phone,
-    //   marital_status,
-    //   address,
-    //   emergency_contact_name,
-    //   emergency_contact_number,
-    //   relation,
-    //   blood_group,
-    //   allergies,
-    //   medical_conditions,
-    //   medical_history,
-    //   insurance_provider,
-    //   insurance_number,
-    // } = req.body;
-
     const userId = req.session.userId;
+    const {
+      first_name,
+      last_name,
+      date_of_birth,
+      gender,
+      phone,
+      marital_status,
+      address,
+      emergency_contact_name,
+      emergency_contact_number,
+      relation,
+      blood_group,
+      allergies,
+      medical_conditions,
+      medical_history,
+      insurance_provider,
+      insurance_number,
+    } = req.body;
+
     if (!userId) {
       return res.status(404).json({ message: "User id not found" });
     }
@@ -155,7 +155,22 @@ export const updateProfile = async (req, res) => {
         userId: userId,
       },
       data: {
-        ...req.body,
+        first_name,
+        last_name,
+        date_of_birth,
+        gender,
+        phone,
+        marital_status,
+        address,
+        emergency_contact_name,
+        emergency_contact_number,
+        relation,
+        blood_group,
+        allergies,
+        medical_conditions,
+        medical_history,
+        insurance_provider,
+        insurance_number,
       },
     });
     res

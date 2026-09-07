@@ -70,10 +70,10 @@ model Patient {
   img                      String?
   colorCode                String?
   isOnboarded              Boolean       @default(false)
-  created_at               DateTime      @default(now())
-  updated_at               DateTime      @updatedAt
   user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   appointments             Appointment[]
+  created_at               DateTime      @default(now())
+  updated_at               DateTime      @updatedAt
 }
 
 model doctor {

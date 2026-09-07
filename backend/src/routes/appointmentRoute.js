@@ -2,6 +2,7 @@ import express from "express";
 import {
   appointmentHistory,
   bookAppointment,
+  cancelAppointment,
   updateAppointment,
   viewallAppointments,
   viewAppointmentById,
@@ -11,11 +12,12 @@ import { isAuthenticated } from "../middleware/isAuthenticated.js";
 
 const router = express.Router();
 
-router.get("/viewDoctorAppointment", viewDoctorAppointments);
-router.get("/viewAppoiontment/:id", viewAppointmentById);
-router.patch("/updateAppointment/:id", updateAppointment);
+router.get("/viewDoctorAppointment", isAuthenticated, viewDoctorAppointments);
 router.post("/bookAppointment", isAuthenticated, bookAppointment);
 router.get("/getAllAppointment", isAuthenticated, viewallAppointments);
+router.get("/viewAppoiontment/:id", isAuthenticated, viewAppointmentById);
+router.patch("/updateAppointment/:id", updateAppointment);
 router.get("/getAppointmentHistory", appointmentHistory);
+router.post("/cancelAppointment", cancelAppointment);
 
 export default router;

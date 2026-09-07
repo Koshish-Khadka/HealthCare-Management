@@ -1,4 +1,5 @@
 import { prisma } from "../config/prisma.js";
+import bcrypt from "bcryptjs";
 
 export const createDoctor = async (req, res) => {
   try {
@@ -41,11 +42,15 @@ export const createDoctor = async (req, res) => {
 
     const result = await prisma.$transaction(async (tx) => {
       // 1. Create user on user table
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(password, salt);
+
       const user = await tx.user.create({
         data: {
           username: name,
+          role: "DOCTOR",
           email: email,
-          password: password, // Note: Consider hashing this for production!
+          password: hash, // Note: Consider hashing this for production!
         },
       });
 
@@ -143,6 +148,7 @@ export const getDoctorById = async (req, res) => {
     res.status(500).json({ message: "Failed to get doctor" });
   }
 };
+
 export const updateDoctor = async (req, res) => {
   try {
     const { id } = req.params;
