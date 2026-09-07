@@ -30,6 +30,17 @@ enum AppointmentStatus {
   COMPLETED
 }
 
+enum AvailabilityStatus {
+  AVAILABLE
+  UNAVAILABLE
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+}
+
 model User {
   id        String     @id @default(uuid())
   username  String     @unique
@@ -77,20 +88,20 @@ model Patient {
 }
 
 model doctor {
-  id                  String        @id @default(uuid())
-  userId              String        @unique
+  id                  String             @id @default(uuid())
+  userId              String             @unique
   name                String
-  email               String        @unique
+  email               String             @unique
   specialization      String
   license_number      String
   phone               String
   address             String
   department          String?
-  availability_status String?
-  job_type            String        @default("FULL")
-  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  availability_status AvailabilityStatus @default(AVAILABLE)
+  job_type            JobType            @default(FULL_TIME)
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
   workingDays         WorkingDays[]
   appointments        Appointment[]
 }

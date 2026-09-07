@@ -4,11 +4,19 @@ import authRoute from "./routes/authRoute.js";
 import patientRoute from "./routes/patientRoute.js";
 import doctorRoute from "./routes/doctorRoute.js";
 import appointmentRoute from "./routes/appointmentRoute.js";
+import cors from "cors";
 const app = express();
 
 dotenv.config();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
+app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: "*",
+  }),
+);
 
 // routes
 app.use("/api/auth", authRoute);

@@ -1,6 +1,7 @@
 import { prisma } from "../config/prisma.js";
 import bcrypt from "bcryptjs";
 
+// admin creates doctor
 export const createDoctor = async (req, res) => {
   try {
     const {
@@ -186,12 +187,12 @@ export const updateDoctor = async (req, res) => {
   }
 };
 
-export const addDoctorWorkingHours = async (req, res) => {
-  try {
-    const userId = req.session.userId;
-    const { workingHours } = req.body;
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Failed to add working hours" });
-  }
-};
+// export const addDoctorWorkingHours = async (req, res) => {
+//   try {
+//     const userId = req.session.userId;
+//     const { workingHours } = req.body;
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Failed to add working hours" });
+//   }
+// };
