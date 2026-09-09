@@ -9,7 +9,7 @@ import {
 import Card from "../../components/common/Card";
 import AvailableDoctor from "../../components/layout/AvailableDoctor";
 import PatientLineChart from "../../components/layout/PatientLineChart";
-import AppointmentTable from "../../components/common/AppointmentTable";
+import Table from "../../components/common/Table";
 
 const PatientDashboard = () => {
   const cardItems = [
@@ -42,6 +42,92 @@ const PatientDashboard = () => {
       subTitle: "Completed Appointment",
     },
   ];
+
+  const appointments = [
+    {
+      id: 1,
+      patientName: "John Doe",
+      doctorName: "Dr. Alexander Fleming",
+      date: "2026-09-10",
+      time: "09:30 AM",
+      type: "Checkup",
+    },
+    {
+      id: 2,
+      patientName: "Jane Smith",
+      doctorName: "Dr. Meredith Grey",
+      date: "2026-09-10",
+      time: "11:15 AM",
+      type: "Follow-up",
+    },
+    {
+      id: 3,
+      patientName: "Michael Jordan",
+      doctorName: "Dr. Gregory House",
+      date: "2026-09-11",
+      time: "02:00 PM",
+      type: "Checkup",
+    },
+  ];
+
+  const appointmentColumns = [
+    {
+      key: "Time",
+      header: "Time",
+      width: "1.2fr",
+      render: (_, row) => (
+        <span className="font-semibold text-gray-900 md:font-medium">
+          {row.time}
+        </span>
+      ),
+    },
+    {
+      key: "Date",
+      header: "Date",
+      width: "1.2fr",
+      render: (_, row) => (
+        <span className="font-semibold text-gray-900 md:font-medium">
+          {row.date}
+        </span>
+      ),
+    },
+
+    {
+      key: "patientName",
+      header: "Patient",
+      width: "1.5fr",
+    },
+
+    {
+      key: "type",
+      header: "Type",
+      width: "1fr",
+      render: (value) => (
+        <span
+          className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${
+            value === "Checkup"
+              ? "bg-green-50 text-green-700 ring-green-600/20"
+              : value === "Emergency"
+                ? "bg-red-50 text-red-700 ring-red-600/20"
+                : "bg-yellow-50 text-yellow-700 ring-yellow-600/20"
+          }`}
+        >
+          {value}
+        </span>
+      ),
+    },
+
+    {
+      key: "doctorName",
+      header: "Doctor",
+      width: "1.5fr",
+      render: (value) => (
+        <button className="font-semibold text-indigo-600 hover:text-indigo-900">
+          {value}
+        </button>
+      ),
+    },
+  ];
   return (
     <div>
       <h1 className="text-lg md:text-2xl font-semibold">
@@ -67,8 +153,8 @@ const PatientDashboard = () => {
         </div>
       </div>
       {/* Appointment Table */}
-      <div className="mt-4">
-        <div className="border border-stone-300 rounded-md shadow-2xl p-3">
+      {/* <div className="mt-4"> */}
+        <div className="mt-4 border border-stone-300 rounded-md shadow-2xl p-3">
           <div className="flex justify-between items-center ">
             <div className="space-y-1">
               <h2 className="text-xl text-stone-900 font-medium">
@@ -82,8 +168,9 @@ const PatientDashboard = () => {
               View all <ArrowRight />
             </button>
           </div>
-          <AppointmentTable />
-        </div>
+          {/* <AppointmentTable /> */}
+          <Table columns={appointmentColumns} data={appointments} />
+        {/* </div> */}
       </div>
     </div>
   );
