@@ -2,7 +2,7 @@ import React from "react";
 import "chart.js/auto";
 import { Line } from "react-chartjs-2";
 
-const PatientTable = () => {
+const PatientLineChart = () => {
   const data = {
     labels: ["Q1", "Q2", "Q3", "Q4"],
     datasets: [
@@ -15,10 +15,10 @@ const PatientTable = () => {
     ],
   };
   return (
-    <div className="border p-3 rounded-md border-stone-300 shadow-lg">
+    <div className="border h-full p-3 rounded-md border-stone-300 shadow-lg">
       <Line data={data} className="w-full h-full" />
     </div>
   );
 };
 
-export default PatientTable;
+export default PatientLineChart;

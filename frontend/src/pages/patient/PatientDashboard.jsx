@@ -1,8 +1,15 @@
-import { Briefcase, CircleCheck, Menu, TrendingUp } from "lucide-react";
-import React from "react";
+import {
+  ArrowRight,
+  Briefcase,
+  CircleCheck,
+  Menu,
+  TrendingUp,
+} from "lucide-react";
+
 import Card from "../../components/common/Card";
-import PatientTable from "../../components/layout/PatientTable";
 import AvailableDoctor from "../../components/layout/AvailableDoctor";
+import PatientLineChart from "../../components/layout/PatientLineChart";
+import AppointmentTable from "../../components/common/AppointmentTable";
 
 const PatientDashboard = () => {
   const cardItems = [
@@ -50,12 +57,32 @@ const PatientDashboard = () => {
         ))}
       </div>
       {/* table and available doctors */}
-      <div className="grid gap-4 grid-cols-1 mt-4 md:grid-cols-3">
-        <div className="md:col-span-2">
-          <PatientTable />
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3 items-stretch">
+        <div className="md:col-span-2 min-h-[300px]">
+          <PatientLineChart />
         </div>
-        <div className="md:col-span-1">
+
+        <div className="md:col-span-1 min-h-[300px]">
           <AvailableDoctor />
+        </div>
+      </div>
+      {/* Appointment Table */}
+      <div className="mt-4">
+        <div className="border border-stone-300 rounded-md shadow-2xl p-3">
+          <div className="flex justify-between items-center ">
+            <div className="space-y-1">
+              <h2 className="text-xl text-stone-900 font-medium">
+                Appointments Overview{" "}
+              </h2>
+              <p className="text-[12px] md:text-sm font-light text-stone-600">
+                This tables shows the appointment detais
+              </p>
+            </div>
+            <button className="flex items-center gap-2 border-none px-2 py-1 rounded-md text-sm transition-colors duration-150 ease-in-out hover:bg-[#004B8D] hover:text-white cursor-pointer">
+              View all <ArrowRight />
+            </button>
+          </div>
+          <AppointmentTable />
         </div>
       </div>
     </div>
