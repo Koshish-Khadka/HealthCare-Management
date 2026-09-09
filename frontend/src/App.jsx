@@ -4,10 +4,10 @@ import Signup from "./pages/auth/Signup";
 import { Navigate, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import DashboardLayout from "./pages/shared/DashboardLayout";
-import Dashboard from "./pages/admin/Dashboard";
 import Appointment from "./pages/shared/Appointment";
 import Patient from "./pages/patient/Patient";
 import Doctor from "./pages/doctor/Doctor";
+import Dashboard from "./pages/shared/Dashboard";
 function App() {
   return (
     <Routes>
