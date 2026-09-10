@@ -3,17 +3,20 @@ import DoctorDashboard from "../doctor/DoctorDashboard";
 import PatientDashboard from "../patient/PatientDashboard";
 
 const Dashboard = () => {
-  // const role = "PATIENT";
-  const role = "ADMIN";
+  const role = "PATIENT";
+  // const role = "ADMIN";
 
 
   switch (role) {
     case "ADMIN":
       return <AdminDashboard />;
+
     case "DOCTOR":
       return <DoctorDashboard />;
+
     case "PATIENT":
       return <PatientDashboard />;
+
     default:
       return <div>Unauthorized</div>;
   }

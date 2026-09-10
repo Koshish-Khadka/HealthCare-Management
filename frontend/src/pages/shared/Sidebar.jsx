@@ -14,7 +14,6 @@ import { Link, useLocation } from "react-router-dom";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const allRoles = ["ADMIN", "DOCTOR", "PATIENT"];
 
-
   let role = "ADMIN";
 
   const SIDEBAR_LINKS = [
@@ -26,6 +25,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           to: "/dashboard",
           access: allRoles,
           icon: LayoutDashboard,
+        },
+        {
+          name: "Profile",
+          to: "/dashboard/self",
+          access: ["PATIENT", "DOCTOR", "ADMIN"],
+          icon: User,
         },
       ],
     },

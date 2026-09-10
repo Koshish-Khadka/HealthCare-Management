@@ -7,6 +7,7 @@ const ProtectedRoute = () => {
   if (!isLoggedIn) {
     return <Navigate to={"/"} replace />;
   }
+  
   return <Outlet />;
 };
 

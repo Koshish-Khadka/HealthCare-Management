@@ -2,9 +2,14 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { useState } from "react";
+import OnBoard from "../patient/OnBoard";
 
 const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const role = "PATIENT";
+  const isOnBoarded = false;
+  const onBordingRequired = role === "PATIENT" && !isOnBoarded;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
@@ -16,7 +21,7 @@ const DashboardLayout = () => {
         <Navbar setIsOpen={setIsOpen} />
         {/* Page Content */}
         <main className="min-w-0 p-4 sm:p-6">
-          <Outlet />
+          {onBordingRequired ? <OnBoard /> : <Outlet />}
         </main>
       </div>
     </div>

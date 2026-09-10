@@ -12,6 +12,8 @@ import PatientLineChart from "../../components/layout/PatientLineChart";
 import Table from "../../components/common/Table";
 
 const PatientDashboard = () => {
+ 
+
   const cardItems = [
     {
       id: 1,
@@ -128,6 +130,8 @@ const PatientDashboard = () => {
       ),
     },
   ];
+
+
   return (
     <div>
       <h1 className="text-lg md:text-2xl font-semibold">
@@ -154,22 +158,22 @@ const PatientDashboard = () => {
       </div>
       {/* Appointment Table */}
       {/* <div className="mt-4"> */}
-        <div className="mt-4 border border-stone-300 rounded-md shadow-2xl p-3">
-          <div className="flex justify-between items-center ">
-            <div className="space-y-1">
-              <h2 className="text-xl text-stone-900 font-medium">
-                Appointments Overview{" "}
-              </h2>
-              <p className="text-[12px] md:text-sm font-light text-stone-600">
-                This tables shows the appointment detais
-              </p>
-            </div>
-            <button className="flex items-center gap-2 border-none px-2 py-1 rounded-md text-sm transition-colors duration-150 ease-in-out hover:bg-[#004B8D] hover:text-white cursor-pointer">
-              View all <ArrowRight />
-            </button>
+      <div className="mt-4 border border-stone-300 rounded-md shadow-2xl p-3">
+        <div className="flex justify-between items-center ">
+          <div className="space-y-1">
+            <h2 className="text-xl text-stone-900 font-medium">
+              Appointments Overview{" "}
+            </h2>
+            <p className="text-[12px] md:text-sm font-light text-stone-600">
+              This tables shows the appointment detais
+            </p>
           </div>
-          {/* <AppointmentTable /> */}
-          <Table columns={appointmentColumns} data={appointments} />
+          <button className="flex items-center gap-2 border-none px-2 py-1 rounded-md text-sm transition-colors duration-150 ease-in-out hover:bg-[#004B8D] hover:text-white cursor-pointer">
+            View all <ArrowRight />
+          </button>
+        </div>
+        {/* <AppointmentTable /> */}
+        <Table columns={appointmentColumns} data={appointments} />
         {/* </div> */}
       </div>
     </div>
