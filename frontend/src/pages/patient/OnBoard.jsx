@@ -269,7 +269,7 @@ const OnBoard = () => {
             />
           </div>
           <h2 className="text-lg font-medium mt-5 col-span-2">Consent</h2>
-          <div className="mt-4 flex gap-4 items-center space-x-2 col-span-2">
+          <div className="mt-4 flex gap-2 items-center space-x-2 col-span-2">
             <input
               type="checkbox"
               id="accept"
@@ -288,7 +288,7 @@ const OnBoard = () => {
               </p>
             </label>
           </div>
-          <div className="mt-4 flex gap-4 items-center space-x-2 col-span-2">
+          <div className="mt-4 flex gap-2 items-center space-x-2 col-span-2">
             <input
               type="checkbox"
               id="accept"
@@ -307,7 +307,7 @@ const OnBoard = () => {
               </p>
             </label>
           </div>
-          <div className="mt-4 flex gap-4 items-center space-x-2 col-span-2">
+          <div className="mt-4 flex gap-2 items-center space-x-2 col-span-2">
             <input
               type="checkbox"
               id="accept"
