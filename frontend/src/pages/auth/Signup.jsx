@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import image from "../../assets/login-image.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../lib/axios";
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const [input, setInput] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleInputChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setInput((values) => ({ ...values, [name]: value }));
+  };
+  // console.log("inputs", input);
+
+  const handleregister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/auth/register", input);
+      console.log(response.data);
+      alert("Patient register sucessfully");
+      navigate("/login");
+    } catch (error) {
+      console.log("Failed to register user", error);
+    }
+  };
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Side - Login Form */}
@@ -23,7 +50,7 @@ const Signup = () => {
           </div>
 
           {/* Login Form */}
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleregister}>
             <div>
               <label
                 htmlFor="name"
@@ -36,6 +63,7 @@ const Signup = () => {
                 id="username"
                 name="username"
                 type="text"
+                onChange={handleInputChange}
                 placeholder="Enter your username"
                 className="w-full h-11 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
               />
@@ -52,6 +80,7 @@ const Signup = () => {
                 id="email"
                 name="email"
                 type="email"
+                onChange={handleInputChange}
                 placeholder="Enter your email"
                 className="w-full h-11 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
               />
@@ -70,6 +99,7 @@ const Signup = () => {
                 id="password"
                 name="password"
                 type="password"
+                onChange={handleInputChange}
                 placeholder="Enter your password"
                 className="w-full h-11 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
               />
@@ -87,6 +117,7 @@ const Signup = () => {
                 name="confirmPassword"
                 type="password"
                 placeholder="Re-Enter your password"
+                onChange={handleInputChange}
                 className="w-full h-11 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
               />
             </div>

@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import image from "../../assets/login-image.jpg";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import api from "../../lib/axios";
 
 const Login = () => {
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setInput((values) => ({ ...values, [name]: value }));
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/auth/login", input);
+      console.log(response.data);
+      alert("Login sucessfull");
+    } catch (error) {
+      console.log("Failed to Login User", error);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Side - Login Form */}
@@ -23,7 +47,7 @@ const Login = () => {
           </div>
 
           {/* Login Form */}
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleLogin}>
             <div>
               <label
                 htmlFor="email"
@@ -36,6 +60,7 @@ const Login = () => {
                 id="email"
                 name="email"
                 type="email"
+                onChange={handleInputChange}
                 placeholder="Enter your email"
                 className="w-full h-11 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
               />
@@ -54,6 +79,7 @@ const Login = () => {
                 id="password"
                 name="password"
                 type="password"
+                onChange={handleInputChange}
                 placeholder="Enter your password"
                 className="w-full h-11 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
               />
