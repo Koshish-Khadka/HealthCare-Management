@@ -3,8 +3,8 @@ import DoctorDashboard from "../doctor/DoctorDashboard";
 import PatientDashboard from "../patient/PatientDashboard";
 
 const Dashboard = () => {
-  const role = "PATIENT";
-  // const role = "ADMIN";
+  // const role = "PATIENT";
+  const role = "ADMIN";
 
 
   switch (role) {

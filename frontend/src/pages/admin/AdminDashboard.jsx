@@ -11,7 +11,7 @@ import BarChart from "../../components/layout/BarChart";
 import Table from "../../components/common/Table";
 
 const AdminDashboard = () => {
-  const cardItems = [
+   const cardItems = [
     {
       id: 1,
       title: "Total Patients",
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
     },
   ];
 
-  const users = [
+   const users = [
     {
       id: 1,
       username: "alice_jones",
