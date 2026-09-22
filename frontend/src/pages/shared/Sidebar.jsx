@@ -11,10 +11,14 @@ import {
   X,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/authContext";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const allRoles = ["ADMIN", "DOCTOR", "PATIENT"];
 
-  let role = "ADMIN";
+  const { user } = useAuth();
+
+  let role = user.role;
+  // let role = "ADMIN";
 
   const SIDEBAR_LINKS = [
     {

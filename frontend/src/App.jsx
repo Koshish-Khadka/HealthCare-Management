@@ -14,9 +14,11 @@ import Billing from "./pages/admin/Billing";
 import Users from "./pages/admin/Users";
 import OnBoard from "./pages/patient/OnBoard";
 import { useAuth } from "./context/authContext";
+import { useUser } from "./context/userContext";
 function App() {
   const { loading, user } = useAuth();
-  if (loading) {
+  const { loading: profileLoading } = useUser();
+  if (loading || profileLoading) {
     return (
       <p className="h-screen flex justify-center items-center">Loading....</p>
     );

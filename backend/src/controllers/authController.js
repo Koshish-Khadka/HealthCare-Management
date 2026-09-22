@@ -78,6 +78,7 @@ export const getUserSession = async (req, res) => {
         username: true,
         email: true,
         role: true,
+        patient: true,
       },
     });
     if (!user) {
@@ -145,20 +146,59 @@ export const changePassword = async (req, res) => {
 export const getMyProfile = async (req, res) => {
   try {
     const userId = req.session.userId;
-    if (!userId) {
-      return res.status(404).json({ message: "User id not found" });
-    }
-    const profile = await prisma.user.findFirst({
+
+    console.log("userId:", userId);
+
+    const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+        status: true,
+      },
     });
-    if (!profile) {
-      return res.status(404).json({ message: "No such profile found" });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
-    res.status(200).json({ message: "Sucessfully fetched profile", profile });
+
+    let profile;
+
+    if (user.role === "DOCTOR") {
+      profile = await prisma.doctor.findUnique({
+        where: {
+          userId: userId,
+        },
+      });
+    } else if (user.role === "PATIENT") {
+      profile = await prisma.patient.findUnique({
+        where: {
+          userId: userId,
+        },
+      });
+    } else if (user.role === "ADMIN") {
+      profile = user;
+    }
+
+    return res.status(200).json({
+      message: "Successfully fetched profile",
+      profile: {
+        ...user,
+        // details: profile,
+        profile,
+      },
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Failed to fetch profile data" });
+
+    return res.status(500).json({
+      message: "Failed to fetch profile data",
+    });
   }
 };

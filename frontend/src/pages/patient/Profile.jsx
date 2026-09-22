@@ -1,26 +1,29 @@
 import React from "react";
 import Table from "../../components/common/Table";
+import { useUser } from "../../context/userContext";
 
 const Profile = () => {
-  const patientData = {
-    first_name: "John",
-    last_name: "Doe",
-    date_of_birth: "1994-05-15",
-    gender: "MALE",
-    phone: "+1-555-0199",
-    email: "john.doe@example.com",
-    marital_status: "Single",
-    address: "123 Health Science Way, Suite 400, New York, NY 10001",
-    emergency_contact_name: "Jane Doe",
-    emergency_contact_number: "+1-555-0144",
-    relation: "Spouse",
-    blood_group: "O-Positive",
-    allergies: "Penicillin, Peanuts",
-    medical_conditions: "Mild Seasonal Asthma",
-    medical_history: "Appendectomy in 2018",
-    insurance_provider: "Blue Cross Blue Shield",
-    insurance_number: "XYZ-987654321",
-  };
+  const { profileData } = useUser();
+
+  // const patientData = {
+  //   first_name: "John",
+  //   last_name: "Doe",
+  //   date_of_birth: "1994-05-15",
+  //   gender: "MALE",
+  //   phone: "+1-555-0199",
+  //   email: "john.doe@example.com",
+  //   marital_status: "Single",
+  //   address: "123 Health Science Way, Suite 400, New York, NY 10001",
+  //   emergency_contact_name: "Jane Doe",
+  //   emergency_contact_number: "+1-555-0144",
+  //   relation: "Spouse",
+  //   blood_group: "O-Positive",
+  //   allergies: "Penicillin, Peanuts",
+  //   medical_conditions: "Mild Seasonal Asthma",
+  //   medical_history: "Appendectomy in 2018",
+  //   insurance_provider: "Blue Cross Blue Shield",
+  //   insurance_number: "XYZ-987654321",
+  // };
 
   const medicalRecords = [
     {
@@ -85,62 +88,74 @@ const Profile = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div>
               <p className="text-xs text-stone-500">First Name</p>
-              <p className="font-medium text-base">{patientData.first_name}</p>
+              <p className="font-medium text-base">
+                {profileData?.profile.first_name}
+              </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Last Name</p>
-              <p className="font-medium text-base">{patientData.last_name}</p>
+              <p className="font-medium text-base">
+                {profileData?.profile.last_name}
+              </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Date of Birth</p>
               <p className="font-medium text-base">
-                {patientData.date_of_birth}
+                {profileData?.profile.date_of_birth}
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Gender</p>
-              <p className="font-medium text-base">{patientData.gender}</p>
+              <p className="font-medium text-base">
+                {profileData?.profile.gender}
+              </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Phone</p>
-              <p className="font-medium text-base">{patientData.phone}</p>
+              <p className="font-medium text-base">
+                {profileData?.profile.phone}
+              </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Email</p>
-              <p className="font-medium text-base">{patientData.email}</p>
+              <p className="font-medium text-base">
+                {profileData?.profile.email}
+              </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Marital Status</p>
               <p className="font-medium text-base">
-                {patientData.marital_status}
+                {profileData?.profile.marital_status}
               </p>
             </div>{" "}
             <div>
               <p className="text-xs text-stone-500">Emergency Contact Name</p>
               <p className="font-medium text-base">
-                {patientData.emergency_contact_name}
+                {profileData?.profile.emergency_contact_name}
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Emergency Contact Number</p>
               <p className="font-medium text-base">
-                {patientData.emergency_contact_number}
+                {profileData?.profile.emergency_contact_number}
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Blood Group</p>
-              <p className="font-medium text-base">{patientData.blood_group}</p>
+              <p className="font-medium text-base">
+                {profileData?.profile.blood_group}
+              </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Insurance Provider</p>
               <p className="font-medium text-base">
-                {patientData.insurance_provider}
+                {profileData?.profile.insurance_provider}
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Insurance Number</p>
               <p className="font-medium text-base">
-                {patientData.insurance_number}
+                {profileData?.profile.insurance_number}
               </p>
             </div>
           </div>

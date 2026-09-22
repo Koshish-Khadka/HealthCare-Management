@@ -3,13 +3,21 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { useState } from "react";
 import OnBoard from "../patient/OnBoard";
+import { useUser } from "../../context/userContext";
+import { useAuth } from "../../context/authContext";
 
 const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const role = "PATIENT";
-  const isOnBoarded = true;
-  const onBordingRequired = role === "PATIENT" && !isOnBoarded;
+  const { profileData } = useUser();
+  const { user } = useAuth();
+  // console.log(profileData?.profile);
 
+  // const role = "PATIENT";
+
+  const onBordingRequired =
+    user.role === "PATIENT" && !profileData?.profile?.isOnboarded;
+  // const onBordingRequired = false;
+  // console.log("User profile data", profileData);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
