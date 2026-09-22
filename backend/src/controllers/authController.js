@@ -56,7 +56,10 @@ export const login = async (req, res) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "12h",
     });
-    res.status(200).json({ message: "Login successful", user, token });
+    const { password: _, ...safeUser } = user;
+    res
+      .status(200)
+      .json({ message: "Login successful", user: safeUser, token });
   } catch (error) {
     res.status(500).json({ message: "Failed to login user" });
   }
@@ -82,6 +85,7 @@ export const getUserSession = async (req, res) => {
     }
     res.status(200).json({ message: "User session retrieved", user });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Failed to get user session" });
   }
 };

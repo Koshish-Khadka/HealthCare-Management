@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import image from "../../assets/login-image.jpg";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import api from "../../lib/axios";
-
+import { useAuth } from "../../context/authContext";
+import { ClipLoader } from "react-spinners";
 const Login = () => {
+  const { setUser, setToken, user, token } = useAuth();
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const name = e.target.name;
@@ -18,14 +21,27 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await api.post("/auth/login", input);
-      console.log(response.data);
-      alert("Login sucessfull");
+      const { user, token } = response.data;
+
+      localStorage.setItem("token", token);
+
+      setUser(user);
+      setToken(token);
+      navigate("/dashboard");
     } catch (error) {
       console.log("Failed to Login User", error);
+      alert(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (user && token) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div className="min-h-screen w-full flex">
@@ -96,9 +112,10 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full h-11 bg-[#004B8D] text-white rounded-md font-medium hover:bg-blue-700 transition cursor-pointer"
+              disabled={loading}
+              className="w-full h-11 bg-[#004B8D] flex justify-center items-center text-white rounded-md font-medium hover:bg-blue-700 transition cursor-pointer"
             >
-              Login
+              {loading ? <ClipLoader color="white" /> : <p>Login</p>}
             </button>
           </form>
 

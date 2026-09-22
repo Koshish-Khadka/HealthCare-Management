@@ -6,7 +6,7 @@ import OnBoard from "../patient/OnBoard";
 
 const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const role = "ADMIN";
+  const role = "PATIENT";
   const isOnBoarded = true;
   const onBordingRequired = role === "PATIENT" && !isOnBoarded;
 

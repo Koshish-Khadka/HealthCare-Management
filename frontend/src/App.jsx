@@ -13,7 +13,15 @@ import MedicalRecords from "./pages/admin/MedicalRecords";
 import Billing from "./pages/admin/Billing";
 import Users from "./pages/admin/Users";
 import OnBoard from "./pages/patient/OnBoard";
+import { useAuth } from "./context/authContext";
 function App() {
+  const { loading, user } = useAuth();
+  if (loading) {
+    return (
+      <p className="h-screen flex justify-center items-center">Loading....</p>
+    );
+  }
+  // console.log("user detail app", user);
   return (
     <Routes>
       <Route path="/login" element={<Login />} />

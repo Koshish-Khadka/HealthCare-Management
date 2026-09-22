@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import image from "../../assets/login-image.jpg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import api from "../../lib/axios";
+import { useAuth } from "../../context/authContext";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { user, token } = useAuth();
   const [input, setInput] = useState({
     username: "",
     email: "",
@@ -30,6 +32,11 @@ const Signup = () => {
       console.log("Failed to register user", error);
     }
   };
+
+  if (user && token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Side - Login Form */}
