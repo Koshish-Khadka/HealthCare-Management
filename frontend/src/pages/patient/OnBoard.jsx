@@ -1,6 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import api from "../../lib/axios";
+import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 
 const OnBoard = () => {
+  const [input, setInput] = useState({
+    first_name: "",
+    last_name: "",
+    date_of_birth: "",
+    gender: "",
+    phone: "",
+    email: "",
+    marital_status: "",
+    address: "",
+    emergency_contact_name: "",
+    emergency_contact_number: "",
+    relation: "",
+    blood_group: "",
+    allergies: "",
+    medical_conditions: "",
+    insurance_provider: "",
+    insurance_number: "",
+    privacy_consent: false,
+    service_consent: false,
+    medical_consent: false,
+  });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setInput((values) => ({
+      ...values,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await api.post("/patients/onboard", input);
+      console.log(response.data);
+      alert("Onboard Sucessfull");
+      window.location.reload();
+    } catch (error) {
+      console.log("Failed to onBoard Patient", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // console.log("input", input);
+
   return (
     <div className="max-w-full border border-stone-300 rounded-md p-4 shadow-md">
       <div className="mb-4">
@@ -10,7 +62,7 @@ const OnBoard = () => {
         </p>
       </div>
       {/* Personal Information */}
-      <form>
+      <form onSubmit={handleFormSubmit}>
         <h2 className="text-lg font-medium mt-5">Personal Information</h2>
         <div className="grid mt-4 grid-cols-1 gap-4 md:grid-cols-2 ">
           <div>
@@ -24,6 +76,7 @@ const OnBoard = () => {
             <input
               id="first_name"
               name="first_name"
+              onChange={handleInputChange}
               type="text"
               placeholder="First Name"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
@@ -40,6 +93,7 @@ const OnBoard = () => {
             <input
               id="last_name"
               name="last_name"
+              onChange={handleInputChange}
               type="text"
               placeholder="Last Name"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
@@ -57,6 +111,7 @@ const OnBoard = () => {
               id="email"
               name="email"
               type="email"
+              onChange={handleInputChange}
               placeholder="Enter your email"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
@@ -70,15 +125,16 @@ const OnBoard = () => {
             </label>
 
             <select
-              id="Gender"
-              name="Gender"
+              id="gender"
+              name="gender"
               type="text"
+              onChange={handleInputChange}
               placeholder="Last Name"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             >
               <option>Choose</option>
-              <option>Male</option>
-              <option>Female</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
           </div>
           <div>
@@ -90,9 +146,10 @@ const OnBoard = () => {
             </label>
 
             <input
-              id="dob"
-              name="dob"
+              id="date_of_birth"
+              name="date_of_birth"
               type="date"
+              onChange={handleInputChange}
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -105,9 +162,10 @@ const OnBoard = () => {
             </label>
 
             <input
-              id="number"
-              name="number"
+              id="phone"
+              name="phone"
               type="number"
+              onChange={handleInputChange}
               placeholder="Contact Number"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
@@ -123,16 +181,18 @@ const OnBoard = () => {
             <select
               id="marital_status"
               name="marital_status"
+              onChange={handleInputChange}
               type="text"
               placeholder="Last Name"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             >
               <option>Select Marital Status</option>
-              <option>Male</option>
-              <option>Female</option>
+              <option value="single">Single</option>
+              <option value="married">Married</option>
+              <option value="others">Others</option>
             </select>
           </div>
-          <div className="md:col-span-2">
+          <div>
             <label
               htmlFor="address"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -144,8 +204,26 @@ const OnBoard = () => {
               id="address"
               name="address"
               type="text"
+              onChange={handleInputChange}
               placeholder="Enter your address"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Current Medical Condition
+            </label>
+
+            <input
+              id="medical_conditions"
+              name="medical_conditions"
+              type="text"
+              onChange={handleInputChange}
+              placeholder="Enter your address"
+              className="w-full h-12 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
           <h2 className="text-lg font-medium mt-5 col-span-2">
@@ -160,9 +238,10 @@ const OnBoard = () => {
             </label>
 
             <input
-              id="emergency_name"
-              name="emergency_name"
+              id="emergency_contact_name"
+              name="emergency_contact_name"
               type="text"
+              onChange={handleInputChange}
               placeholder="Enter your Emergency contact name"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
@@ -176,9 +255,10 @@ const OnBoard = () => {
             </label>
 
             <input
-              id="emergency_number"
-              name="emergency_number"
+              id="emergency_contact_number"
+              name="emergency_contact_number"
               type="number"
+              onChange={handleInputChange}
               placeholder="Enter your Emergency contact number"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
@@ -195,14 +275,15 @@ const OnBoard = () => {
               id="relation"
               name="relation"
               type="text"
+              onChange={handleInputChange}
               placeholder="Last Name"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             >
               <option>Select relation</option>
-              <option>Father</option>
-              <option>Mother</option>
-              <option>Spouse</option>
-              <option>Others</option>
+              <option value="father">Father</option>
+              <option value="mother">Mother</option>
+              <option value="spouse">Spouse</option>
+              <option value="others">Others</option>
             </select>
           </div>
           <h2 className="text-lg font-medium mt-5 col-span-2">
@@ -218,6 +299,7 @@ const OnBoard = () => {
             <input
               id="blood_group"
               name="blood_group"
+              onChange={handleInputChange}
               type="text"
               placeholder="Enter your Blood Group"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
@@ -233,6 +315,7 @@ const OnBoard = () => {
             <input
               id="allergies"
               name="allergies"
+              onChange={handleInputChange}
               type="text"
               placeholder="Enter your Allergies"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
@@ -248,6 +331,7 @@ const OnBoard = () => {
             <input
               id="insurance_provider"
               name="insurance_provider"
+              onChange={handleInputChange}
               type="text"
               placeholder="Enter your Insurance Provider name"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
@@ -263,6 +347,7 @@ const OnBoard = () => {
             <input
               id="insurance_number"
               name="insurance_number"
+              onChange={handleInputChange}
               type="number"
               placeholder="Enter your Insurance Provider number"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
@@ -272,10 +357,13 @@ const OnBoard = () => {
           <div className="mt-4 flex gap-2 items-center space-x-2 col-span-2">
             <input
               type="checkbox"
-              id="accept"
+              id="privacy_consent"
+              name="privacy_consent"
+              checked={input.privacy_consent}
+              onChange={handleInputChange}
               className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
             />
-            <label htmlFor="accept">
+            <label htmlFor="privacy_consent">
               <p className="block text-base font-semibold text-gray-700 mb-1">
                 Privacy Policy Agreement
               </p>
@@ -291,10 +379,13 @@ const OnBoard = () => {
           <div className="mt-4 flex gap-2 items-center space-x-2 col-span-2">
             <input
               type="checkbox"
-              id="accept"
+              id="service_consent"
+              name="service_consent"
+              checked={input.service_consent}
+              onChange={handleInputChange}
               className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
             />
-            <label htmlFor="accept">
+            <label htmlFor="service_consent">
               <p className="block text-base font-semibold text-gray-700 mb-1">
                 Terms of Service Agreement
               </p>
@@ -310,10 +401,13 @@ const OnBoard = () => {
           <div className="mt-4 flex gap-2 items-center space-x-2 col-span-2">
             <input
               type="checkbox"
-              id="accept"
+              id="medical_consent"
+              name="medical_consent"
+              checked={input.medical_consent}
+              onChange={handleInputChange}
               className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
             />
-            <label htmlFor="accept">
+            <label htmlFor="medical_consent">
               <p className="block text-base font-semibold text-gray-700 mb-1">
                 Informed Consent for Medical Treatment
               </p>
@@ -330,8 +424,8 @@ const OnBoard = () => {
         </div>
         {/* button  */}
         <div className="mt-8 flex justify-end items-end">
-          <button className="px-3 py-1 border border-stone-300 rounded-md bg-[#004B8D] text-white transition-colors duration-200 ease-in-out hover:bg-[#0764b5] cursor-pointer">
-            Submit
+          <button className="px-3 py-1 border flex justify-center items-center border-stone-300 rounded-md bg-[#004B8D] text-white transition-colors duration-200 ease-in-out hover:bg-[#0764b5] cursor-pointer">
+            {loading ? <ClipLoader color="white" /> : <p>Submit</p>}
           </button>
         </div>
       </form>

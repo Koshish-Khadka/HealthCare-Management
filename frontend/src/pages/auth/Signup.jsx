@@ -3,16 +3,19 @@ import image from "../../assets/login-image.jpg";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import api from "../../lib/axios";
 import { useAuth } from "../../context/authContext";
+import { ClipLoader } from "react-spinners";
 
 const Signup = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
 
   const handleInputChange = (e) => {
     const name = e.target.name;
@@ -23,6 +26,7 @@ const Signup = () => {
 
   const handleregister = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await api.post("/auth/register", input);
       console.log(response.data);
@@ -30,6 +34,8 @@ const Signup = () => {
       navigate("/login");
     } catch (error) {
       console.log("Failed to register user", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,9 +145,10 @@ const Signup = () => {
 
             <button
               type="submit"
-              className="w-full h-11 bg-[#004B8D] text-white rounded-md font-medium hover:bg-blue-700 transition cursor-pointer"
+              disabled={loading}
+              className="w-full h-11 bg-[#004B8D] flex justify-center items-center text-white rounded-md font-medium hover:bg-blue-700 transition cursor-pointer"
             >
-              Login
+              {loading ? <ClipLoader color="white" /> : <p>Register</p>}
             </button>
           </form>
 

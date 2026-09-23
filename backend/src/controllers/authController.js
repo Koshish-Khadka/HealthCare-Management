@@ -2,10 +2,101 @@ import { prisma } from "../config/prisma.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+// export const register = async (req, res) => {
+//   try {
+//     const { username, email, password, confirmPassword } = req.body;
+//     // console.log(req.body);
+//     if (!username || !email || !password || !confirmPassword) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+//     if (password !== confirmPassword) {
+//       return res.status(400).json({ message: "Passwords do not match" });
+//     }
+
+//     // create a user and create profile linked to users on the patient table
+
+//     const result = await prisma.$transaction(async (tx) => {
+//       const salt = bcrypt.genSaltSync(10);
+//       const hash = bcrypt.hashSync(password, salt);
+//       const newUser = await tx.user.create({
+//         data: {
+//           username,
+//           email,
+//           password: hash,
+//           role: "PATIENT",
+//         },
+//       });
+
+//       const patient = await tx.patient.create({
+//         data: {
+//           userId: newUser.id,
+//         },
+//       });
+//       return { newUser, patient };
+//     });
+//     res.status(201).json({ message: "User registered successfully", result });
+//   } catch (error) {
+//     console.error("REGISTER ERROR:", error);
+
+//     return res.status(500).json({
+//       message: "Failed to register user",
+//       error: error.message,
+//     });
+//   }
+// };
+
+// export const register = async (req, res) => {
+//   try {
+//     const { username, email, password, confirmPassword } = req.body;
+
+//     if (!username || !email || !password || !confirmPassword) {
+//       return res.status(400).json({
+//         message: "All fields are required",
+//       });
+//     }
+
+//     if (password !== confirmPassword) {
+//       return res.status(400).json({
+//         message: "Passwords do not match",
+//       });
+//     }
+
+//     const hash = await bcrypt.hash(password, 10);
+
+//     const user = await prisma.user.create({
+//       data: {
+//         username,
+//         email,
+//         password: hash,
+//         role: "PATIENT",
+
+//         patient: {
+//           create: {},
+//         },
+//       },
+
+//       include: {
+//         patient: true,
+//       },
+//     });
+
+//     return res.status(201).json({
+//       message: "User registered successfully",
+//       user,
+//     });
+//   } catch (error) {
+//     console.error("REGISTER ERROR:", error);
+
+//     return res.status(500).json({
+//       message: "Failed to register user",
+//       error: error.message,
+//     });
+//   }
+// };
+
 export const register = async (req, res) => {
   try {
     const { username, email, password, confirmPassword } = req.body;
-    // console.log(req.body);
     if (!username || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -28,6 +119,7 @@ export const register = async (req, res) => {
     res.status(500).json({ message: "Failed to register user" });
   }
 };
+
 
 export const login = async (req, res) => {
   try {
@@ -146,9 +238,6 @@ export const changePassword = async (req, res) => {
 export const getMyProfile = async (req, res) => {
   try {
     const userId = req.session.userId;
-
-    console.log("userId:", userId);
-
     const user = await prisma.user.findUnique({
       where: {
         id: userId,

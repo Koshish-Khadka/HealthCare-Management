@@ -3,13 +3,13 @@ import { prisma } from "../config/prisma.js";
 export const onBoardPatient = async (req, res) => {
   try {
     const userId = req.session.userId;
+    console.log("patient onboard data", req.body);
     const {
       first_name,
       last_name,
       date_of_birth,
       gender,
       phone,
-      email,
       marital_status,
       address,
       emergency_contact_name,
@@ -30,7 +30,6 @@ export const onBoardPatient = async (req, res) => {
       !date_of_birth ||
       !gender ||
       !phone ||
-      !email ||
       !marital_status ||
       !address ||
       !emergency_contact_name ||
@@ -40,13 +39,17 @@ export const onBoardPatient = async (req, res) => {
       !allergies ||
       !medical_conditions ||
       !insurance_provider ||
-      !insurance_number ||
-      !privacy_consent ||
-      !service_consent ||
-      !medical_consent
+      !insurance_number
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
+
+    if (!privacy_consent || !service_consent || !medical_consent) {
+      return res.status(400).json({
+        message: "All consents are required",
+      });
+    }
+
     // check if the patient data already exists
     const checkPatient = await prisma.patient.findUnique({
       where: {
@@ -62,10 +65,9 @@ export const onBoardPatient = async (req, res) => {
         userId: userId,
         first_name,
         last_name,
-        date_of_birth,
+        date_of_birth: new Date(date_of_birth),
         gender,
         phone,
-        email,
         marital_status,
         address,
         emergency_contact_name,
@@ -87,7 +89,7 @@ export const onBoardPatient = async (req, res) => {
       .json({ message: "Patient onboarded successfully", patient: newPatient });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Failed to onboard patient" });
+    res.status(500).json({ message: "Failed to onboard patient", error });
   }
 };
 

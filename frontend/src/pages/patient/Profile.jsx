@@ -1,9 +1,11 @@
 import React from "react";
 import Table from "../../components/common/Table";
 import { useUser } from "../../context/userContext";
+import { useAuth } from "../../context/authContext";
 
 const Profile = () => {
   const { profileData } = useUser();
+  const { user } = useAuth();
 
   // const patientData = {
   //   first_name: "John",
@@ -74,11 +76,9 @@ const Profile = () => {
             </div>
             <div className="space-y-2 text-center mt-2">
               <p className="text-xl font-semibold text-stone-800">
-                Koshish Khadka
+                {user.username}
               </p>
-              <p className="text-xs font-light text-stone-400">
-                koshish2003@gmail.com
-              </p>
+              <p className="text-xs font-light text-stone-400">{user.email}</p>
               <p className="text-lg font-semibold text-stone-800">0</p>
               <p className="text-sm font-semibold">Appointments</p>
             </div>

@@ -58,26 +58,25 @@ model User {
 model Patient {
   id                       String        @id @default(uuid())
   userId                   String        @unique
-  first_name               String
-  last_name                String
-  date_of_birth            DateTime
-  gender                   Gender        @default(MALE)
-  phone                    String
-  email                    String        @unique
-  marital_status           String
-  address                  String
-  emergency_contact_name   String
-  emergency_contact_number String
-  relation                 String
+  first_name               String?
+  last_name                String?
+  date_of_birth            DateTime?
+  gender                   String?
+  phone                    String?
+  marital_status           String?
+  address                  String?
+  emergency_contact_name   String?
+  emergency_contact_number String?
+  relation                 String?
+  privacy_consent          Boolean       @default(false)
+  service_consent          Boolean       @default(false)
+  medical_consent          Boolean       @default(false)
   blood_group              String?
   allergies                String?
   medical_conditions       String?
   medical_history          String?
   insurance_provider       String?
   insurance_number         String?
-  privacy_consent          Boolean
-  service_consent          Boolean
-  medical_consent          Boolean
   img                      String?
   colorCode                String?
   isOnboarded              Boolean       @default(false)
