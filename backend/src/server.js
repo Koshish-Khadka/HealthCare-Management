@@ -4,6 +4,7 @@ import authRoute from "./routes/authRoute.js";
 import patientRoute from "./routes/patientRoute.js";
 import doctorRoute from "./routes/doctorRoute.js";
 import appointmentRoute from "./routes/appointmentRoute.js";
+import adminRoute from "./routes/adminRoute.js";
 import cors from "cors";
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/patients", patientRoute);
 app.use("/api/doctors", doctorRoute);
 app.use("/api/appointment", appointmentRoute);
+app.use("/api/admin", adminRoute);
 
 app.get("/", (req, res) => {
   res.send("Backend is running");

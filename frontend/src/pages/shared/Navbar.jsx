@@ -1,7 +1,9 @@
 import { LogOutIcon, Menu, Search, Settings } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../../context/authContext";
 const Navbar = ({ setIsOpen }) => {
   const [menu, setMenu] = useState(false);
+  const { user } = useAuth();
   return (
     <header className="sticky top-0 z-30 h-16 border-b border-stone-200  bg-white">
       <div className="flex h-full items-center justify-between px-4 sm:px-6">
@@ -29,6 +31,7 @@ const Navbar = ({ setIsOpen }) => {
           >
             <p className="text-white text-sm font-semibold">K</p>
           </div>
+          {user.role}
           {/* dropdown */}
           {menu && (
             <div className="max-w-84 absolute right-8 border border-stone-200 shadow-xl px-4 py-2 rounded-md bg-white ">

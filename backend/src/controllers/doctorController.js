@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 export const createDoctor = async (req, res) => {
   try {
     const {
-      name,
+      username,
       email,
       password,
       specialization,
@@ -17,16 +17,17 @@ export const createDoctor = async (req, res) => {
       job_type,
     } = req.body;
 
+    console.log("create doctor", req.body);
+
     if (
       !email ||
       !password ||
-      !name ||
+      !username ||
       !specialization ||
       !license_number ||
       !phone ||
       !address ||
       !department ||
-      !availability ||
       !job_type
     ) {
       return res.status(400).json({ message: "All fields are required" });
@@ -48,10 +49,10 @@ export const createDoctor = async (req, res) => {
 
       const user = await tx.user.create({
         data: {
-          username: name,
+          username,
           role: "DOCTOR",
           email: email,
-          password: hash, // Note: Consider hashing this for production!
+          password: hash,
         },
       });
 
@@ -59,7 +60,7 @@ export const createDoctor = async (req, res) => {
       const doctor = await tx.doctor.create({
         data: {
           userId: user.id,
-          name,
+          name: username,
           email,
           specialization,
           license_number,

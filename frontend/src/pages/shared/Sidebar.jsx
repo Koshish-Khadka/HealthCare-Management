@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         {
           name: "Profile",
           to: "/dashboard/self",
-          access: ["PATIENT", "DOCTOR", "ADMIN"],
+          access: ["PATIENT", "DOCTOR"],
           icon: User,
         },
       ],

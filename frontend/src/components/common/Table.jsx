@@ -1,6 +1,9 @@
 import React from "react";
 
-const Table = ({ columns, data, emptyMessage = "No data found." }) => {
+const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
+  if (loading) {
+    return <p>Loading content...</p>;
+  }
   return (
     <div className="w-full overflow-hidden rounded-lg bg-white mt-4">
       {/* Desktop Header */}

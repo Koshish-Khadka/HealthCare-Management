@@ -183,3 +183,14 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ message: "Failed to update profile" });
   }
 };
+
+export const getAllPatient = async (req, res) => {
+  try {
+    const patients = await prisma.patient.findMany();
+    res
+      .status(200)
+      .json({ message: "Sucessfully fetched patient data", patients });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to get all Patient", error });
+  }
+};

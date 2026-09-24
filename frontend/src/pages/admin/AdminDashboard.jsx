@@ -9,9 +9,30 @@ import {
 import DoughnutChart from "../../components/layout/DoughnutChart";
 import BarChart from "../../components/layout/BarChart";
 import Table from "../../components/common/Table";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../lib/axios";
 
 const AdminDashboard = () => {
-   const cardItems = [
+  const [user, setUser] = useState(null || []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await api.get("/admin/users");
+      setUser(response.data.users);
+      // console.log(response);
+    } catch (error) {
+      console.log("Failed to fetch user data", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  // console.log("Users data for admin", user);
+
+  const cardItems = [
     {
       id: 1,
       title: "Total Patients",
@@ -42,48 +63,48 @@ const AdminDashboard = () => {
     },
   ];
 
-   const users = [
-    {
-      id: 1,
-      username: "alice_jones",
-      email: "alice.jones@example.com",
-      role: "Admin",
-      joinDate: "2024-03-15",
-      status: "INACTIVE",
-    },
-    {
-      id: 2,
-      username: "bob_smith",
-      email: "bob.smith@example.com",
-      role: "Doctor",
-      joinDate: "2025-01-10",
-      status: "INACTIVE",
-    },
-    {
-      id: 3,
-      username: "charlie_brown",
-      email: "charlie.b@example.com",
-      role: "Patient",
-      joinDate: "2025-06-22",
-      status: "ACTIVE",
-    },
-    {
-      id: 4,
-      username: "diana_prince",
-      email: "diana.p@example.com",
-      role: "Doctor",
-      joinDate: "2025-11-05",
-      status: "ACTIVE",
-    },
-    {
-      id: 5,
-      username: "ethan_hunt",
-      email: "ethan.hunt@example.com",
-      role: "Receptionist",
-      joinDate: "2026-02-18",
-      status: "ACTIVE",
-    },
-  ];
+  // const users = [
+  //   {
+  //     id: 1,
+  //     username: "alice_jones",
+  //     email: "alice.jones@example.com",
+  //     role: "Admin",
+  //     joinDate: "2024-03-15",
+  //     status: "INACTIVE",
+  //   },
+  //   {
+  //     id: 2,
+  //     username: "bob_smith",
+  //     email: "bob.smith@example.com",
+  //     role: "Doctor",
+  //     joinDate: "2025-01-10",
+  //     status: "INACTIVE",
+  //   },
+  //   {
+  //     id: 3,
+  //     username: "charlie_brown",
+  //     email: "charlie.b@example.com",
+  //     role: "Patient",
+  //     joinDate: "2025-06-22",
+  //     status: "ACTIVE",
+  //   },
+  //   {
+  //     id: 4,
+  //     username: "diana_prince",
+  //     email: "diana.p@example.com",
+  //     role: "Doctor",
+  //     joinDate: "2025-11-05",
+  //     status: "ACTIVE",
+  //   },
+  //   {
+  //     id: 5,
+  //     username: "ethan_hunt",
+  //     email: "ethan.hunt@example.com",
+  //     role: "Receptionist",
+  //     joinDate: "2026-02-18",
+  //     status: "ACTIVE",
+  //   },
+  // ];
 
   const userColumns = [
     {
@@ -95,7 +116,7 @@ const AdminDashboard = () => {
       header: "email",
     },
     {
-      key: "joinDate",
+      key: "createdAt",
       header: "joinDate",
     },
     {
@@ -150,12 +171,14 @@ const AdminDashboard = () => {
               This tables shows the users detais
             </p>
           </div>
-          <button className="flex items-center gap-2 border-none px-2 py-1 rounded-md text-sm transition-colors duration-150 ease-in-out hover:bg-[#004B8D] hover:text-white cursor-pointer">
-            View all <ArrowRight />
-          </button>
+          <Link to={"/dashboard/users"}>
+            <button className="flex items-center gap-2 border-none px-2 py-1 rounded-md text-sm transition-colors duration-150 ease-in-out hover:bg-[#004B8D] hover:text-white cursor-pointer">
+              View all <ArrowRight />
+            </button>
+          </Link>
         </div>
         {/* <AppointmentTable /> */}
-        <Table columns={userColumns} data={users} />
+        <Table columns={userColumns} data={user.slice(0, 5)} />
       </div>
     </div>
   );

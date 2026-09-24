@@ -1,52 +1,36 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "../../components/common/Table";
 import { Eye, Plus, SquarePen, Trash } from "lucide-react";
 import AddDoctor from "../doctor/AddDoctor";
+import api from "../../lib/axios";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
+  const [allDoctors, setALLDoctors] = useState(null || []);
 
-  const doctors = [
-    {
-      id: 1,
-      name: "Dr. Sarah Jenkins",
-      email: "s.jenkins@hospital.com",
-      specialization: "Interventional Cardiology",
-      department: "Cardiology",
-      availability_status: "Available",
-    },
-    {
-      id: 2,
-      name: "Dr. Michael Chang",
-      email: "m.chang@hospital.com",
-      specialization: "Pediatric Neurologist",
-      department: "Neurology",
-      availability_status: "On Break",
-    },
-    {
-      id: 3,
-      name: "Dr. Elena Rostova",
-      email: "e.rostova@hospital.com",
-      specialization: "Orthopedic Spine Surgery",
-      department: "Orthopedics",
-      availability_status: "In Surgery",
-    },
-    {
-      id: 4,
-      name: "Dr. Marcus Vance",
-      email: "m.vance@hospital.com",
-      specialization: "Critical Care Medicine",
-      department: "Emergency",
-      availability_status: "Available",
-    },
-    {
-      id: 5,
-      name: "Dr. Aisha Rahman",
-      email: "a.rahman@hospital.com",
-      specialization: "Clinical Dermatologist",
-      department: "Dermatology",
-      availability_status: "Offline",
-    },
-  ];
+  console.log("All doctor details", allDoctors);
+
+  const [loading, setLoading] = useState(false);
+
+  const fetchALLDoctors = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/doctors/allDoctors");
+      setALLDoctors(response.data.doctors);
+    } catch (error) {
+      console.log("Failed to fetch doctor ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchALLDoctors();
+  }, []);
+
+  if (loading)
+    return (
+      <p className="h-screen flex justify-center items-center">Loading.....</p>
+    );
+
   const doctorColumns = [
     {
       key: "id",
@@ -108,7 +92,7 @@ const Doctor = () => {
       </div>
 
       <div>
-        <Table data={doctors} columns={doctorColumns} />
+        <Table data={allDoctors} columns={doctorColumns} />
       </div>
 
       {/* Overlay */}

@@ -18,12 +18,13 @@ import { useUser } from "./context/userContext";
 function App() {
   const { loading, user } = useAuth();
   const { loading: profileLoading } = useUser();
+  
   if (loading || profileLoading) {
     return (
       <p className="h-screen flex justify-center items-center">Loading....</p>
     );
   }
-  // console.log("user detail app", user);
+  // console.log("user detail", user); 
   return (
     <Routes>
       <Route path="/login" element={<Login />} />

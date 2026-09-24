@@ -1,50 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../components/common/Table";
 import { EllipsisVertical, Eye, SquarePen, Trash } from "lucide-react";
+import api from "../../lib/axios";
 
 const Users = () => {
-  const users = [
-    {
-      id: 1,
-      username: "alice_jones",
-      email: "alice.jones@example.com",
-      role: "Admin",
-      joinDate: "2024-03-15",
-      status: "INACTIVE",
-    },
-    {
-      id: 2,
-      username: "bob_smith",
-      email: "bob.smith@example.com",
-      role: "Doctor",
-      joinDate: "2025-01-10",
-      status: "INACTIVE",
-    },
-    {
-      id: 3,
-      username: "charlie_brown",
-      email: "charlie.b@example.com",
-      role: "Patient",
-      joinDate: "2025-06-22",
-      status: "ACTIVE",
-    },
-    {
-      id: 4,
-      username: "diana_prince",
-      email: "diana.p@example.com",
-      role: "Doctor",
-      joinDate: "2025-11-05",
-      status: "ACTIVE",
-    },
-    {
-      id: 5,
-      username: "ethan_hunt",
-      email: "ethan.hunt@example.com",
-      role: "Receptionist",
-      joinDate: "2026-02-18",
-      status: "ACTIVE",
-    },
-  ];
+  const [allUsers, setAllUsers] = useState(null || []);
+  const [loading, setLoading] = useState(false);
+
+  const fetchAllUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get("/admin/users");
+      setAllUsers(response.data.users);
+    } catch (error) {
+      console.log("Failed to fetch all users", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
+
+  // console.log("All users", allUsers);
   const userColumns = [
     {
       key: "username",
@@ -53,14 +32,17 @@ const Users = () => {
     {
       key: "email",
       header: "email",
+      width: "1.2fr",
     },
-    {
-      key: "joinDate",
-      header: "joinDate",
-    },
+
     {
       key: "role",
       header: "role",
+    },
+    {
+      key: "createdAt",
+      header: "joinDate",
+      render: (value) => <span>{value.split("T")[0]}</span>,
     },
     {
       key: "status",
@@ -87,7 +69,7 @@ const Users = () => {
   ];
   return (
     <div>
-      <Table data={users} columns={userColumns} />
+      <Table data={allUsers} columns={userColumns} loading={loading} />
     </div>
   );
 };

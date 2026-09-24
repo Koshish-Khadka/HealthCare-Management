@@ -26,7 +26,6 @@ const OnBoard = () => {
     medical_consent: false,
   });
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -424,7 +423,10 @@ const OnBoard = () => {
         </div>
         {/* button  */}
         <div className="mt-8 flex justify-end items-end">
-          <button className="px-3 py-1 border flex justify-center items-center border-stone-300 rounded-md bg-[#004B8D] text-white transition-colors duration-200 ease-in-out hover:bg-[#0764b5] cursor-pointer">
+          <button
+            disabled={loading}
+            className="px-3 py-1 border flex justify-center items-center border-stone-300 rounded-md bg-[#004B8D] text-white transition-colors duration-200 ease-in-out hover:bg-[#0764b5] cursor-pointer"
+          >
             {loading ? <ClipLoader color="white" /> : <p>Submit</p>}
           </button>
         </div>
