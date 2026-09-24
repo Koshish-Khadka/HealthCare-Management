@@ -11,7 +11,7 @@ const AddDoctor = ({ onClose }) => {
             Register a new Doctor.
           </p>
         </div>
-        <div onClick={() => onClose()}>
+        <div onClick={() => onClose()} className="cursor-pointer">
           <X />
         </div>
       </div>
