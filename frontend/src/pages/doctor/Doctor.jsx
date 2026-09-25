@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import Table from "../../components/common/Table";
-import { Eye, Plus, SquarePen, Trash } from "lucide-react";
+import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import AddDoctor from "../doctor/AddDoctor";
 import api from "../../lib/axios";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
   const [allDoctors, setALLDoctors] = useState(null || []);
 
-  console.log("All doctor details", allDoctors);
+  // console.log("All doctor details", allDoctors);
 
   const [loading, setLoading] = useState(false);
 
@@ -25,11 +25,6 @@ const Doctor = () => {
   useEffect(() => {
     fetchALLDoctors();
   }, []);
-
-  if (loading)
-    return (
-      <p className="h-screen flex justify-center items-center">Loading.....</p>
-    );
 
   const doctorColumns = [
     {
@@ -72,41 +67,59 @@ const Doctor = () => {
       header: "action",
       render: () => (
         <span className="flex flex-col items-center md:flex-row gap-3 cursor-pointer ">
-          <Eye color="#16a34a" size={24} />
-          <SquarePen color="#4b5563" size={20} />
-          <Trash color="#dc2626" size={20} />
+          <Eye color="#16a34a" size={24} className="hover:scale-110" />
+          <SquarePen color="#4b5563" size={20} className="hover:scale-110" />
+          <Trash color="#dc2626" size={20} className="hover:scale-110" />
         </span>
       ),
     },
   ];
   return (
     <div>
-      <div className="flex items-end justify-end">
-        <button
-          className="flex cursor-pointer items-center gap-2 rounded-md border border-stone-300 bg-[#004B8D] px-4 py-2 text-white transition-colors duration-200 hover:bg-[#0764b5]"
-          onClick={() => setAddDoctorOpen(true)}
-        >
-          <Plus size={18} />
-          Add Doctor
-        </button>
+      <div className="flex justify-between items-center p-3 rounded-md bg-white">
+        <p className="text-2xl font-bold">
+          {allDoctors.length || 0}{" "}
+          <span className="text-lg font-light">Doctors</span>
+        </p>
+        <div className="flex items-center gap-4">
+          <div className="hidden relative w-full max-w-68 lg:block">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-event-none">
+              <Search className="w-4 h-4 text-slate-500" />
+            </div>
+            <input
+              type="text"
+              className="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Search Doctors..."
+            />
+          </div>
+          <button
+            className="flex cursor-pointer items-center gap-2 rounded-md border border-stone-300 bg-[#004B8D] px-4 py-1 text-white transition-colors duration-200 hover:bg-[#0764b5]"
+            onClick={() => setAddDoctorOpen(true)}
+          >
+            <Plus size={18} />
+            Add Doctor
+          </button>
+        </div>
       </div>
 
+      <div className="flex items-end justify-end"></div>
+
       <div>
-        <Table data={allDoctors} columns={doctorColumns} />
+        <Table data={allDoctors} columns={doctorColumns} loading={loading} />
       </div>
 
       {/* Overlay */}
       {addDoctorOpen && (
         <div
           onClick={() => setAddDoctorOpen(false)}
-          className="fixed inset-0 z-25 backdrop-blur-sm"
+          className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
         />
       )}
 
       {/* Right Drawer */}
       <div
         className={`
-        fixed right-0 top-0 z-25
+        fixed right-0 top-0 z-[60]
         h-screen w-full sm:w-[500px] lg:w-[600px]
         bg-stone-100 shadow-xl
         transition-transform duration-300 ease-in-out
@@ -114,16 +127,6 @@ const Doctor = () => {
       `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-stone-300 p-4">
-          <h2 className="text-lg font-semibold">Add Doctor</h2>
-
-          <button
-            onClick={() => setAddDoctorOpen(false)}
-            className="cursor-pointer text-xl text-stone-500 hover:text-stone-800"
-          >
-            ×
-          </button>
-        </div>
 
         {/* Content */}
         {/* <div className="h-[calc(100vh-65px)] overflow-y-auto p-4">

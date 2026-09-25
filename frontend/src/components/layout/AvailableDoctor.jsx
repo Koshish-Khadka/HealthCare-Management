@@ -1,50 +1,54 @@
-const AvailableDoctor = () => {
-  const doctors = [
-    {
-      id: 1,
-      name: "Dr. Alexander Fleming",
-      department: "Immunology",
-    },
-    {
-      id: 2,
-      name: "Dr. Meredith Grey",
-      department: "General Surgery",
-    },
-    {
-      id: 3,
-      name: "Dr. Gregory House",
-      department: "Diagnostic Medicine",
-    },
-    {
-      id: 4,
-      name: "Dr. Charles Xavier",
-      department: "Neurology",
-    },
-    {
-      id: 5,
-      name: "Dr. Strange",
-      department: "Neurosurgeon",
-    },
-    {
-      id: 6,
-      name: "Dr. Koshish",
-      department: "Neurosurgeon",
-    },
-    {
-      id: 7,
-      name: "Dr. Koshish",
-      department: "Neurosurgeon",
-    },
-    {
-      id: 8,
-      name: "Dr. Koshish",
-      department: "Neurosurgeon",
-    },
-  ];
+const AvailableDoctor = ({ loading, availableDoctors }) => {
+  // const doctors = [
+  //   {
+  //     id: 1,
+  //     name: "Dr. Alexander Fleming",
+  //     department: "Immunology",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Dr. Meredith Grey",
+  //     department: "General Surgery",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Dr. Gregory House",
+  //     department: "Diagnostic Medicine",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Dr. Charles Xavier",
+  //     department: "Neurology",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Dr. Strange",
+  //     department: "Neurosurgeon",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Dr. Koshish",
+  //     department: "Neurosurgeon",
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Dr. Koshish",
+  //     department: "Neurosurgeon",
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Dr. Koshish",
+  //     department: "Neurosurgeon",
+  //   },
+  // ];
+
+  if (loading) {
+    return <p>Loading content ...</p>;
+  }
   return (
     <div className="border h-full border-stone-300 rounded-md p-3">
       <h1 className="text-lg font-medium">Available doctors</h1>
-      {doctors.slice(0, 6).map((data) => (
+      {availableDoctors.slice(0, 6).map((data) => (
         <div
           className="flex items-center justify-between mt-2 border border-stone-300 px-3 py-2 rounded-md"
           key={data.id}

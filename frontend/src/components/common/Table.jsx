@@ -1,8 +1,13 @@
 import React from "react";
+import Loader from "./Loader";
 
 const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
   if (loading) {
-    return <p>Loading content...</p>;
+    return (
+      <p className="pt-10 flex justify-center ">
+        <Loader />
+      </p>
+    );
   }
   return (
     <div className="w-full overflow-hidden rounded-lg bg-white mt-4">

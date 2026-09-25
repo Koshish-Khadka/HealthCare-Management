@@ -188,6 +188,23 @@ export const updateDoctor = async (req, res) => {
   }
 };
 
+export const getAvailableDoctors = async (req, res) => {
+  try {
+    const doctors = await prisma.doctor.findMany({
+      where: {
+        availability_status: "AVAILABLE",
+      },
+    });
+    res
+      .status(200)
+      .json({ message: "Sucessfully fetched available doctors", doctors });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch available doctors", error });
+  }
+};
+
 // export const addDoctorWorkingHours = async (req, res) => {
 //   try {
 //     const userId = req.session.userId;

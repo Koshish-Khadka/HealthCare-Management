@@ -118,8 +118,8 @@ const Profile = () => {
             </div>
             <div>
               <p className="text-xs text-stone-500">Email</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.email}
+              <p className="font-medium text-base max-w-16">
+                {profileData?.email}
               </p>
             </div>
             <div>

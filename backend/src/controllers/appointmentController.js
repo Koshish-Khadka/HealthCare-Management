@@ -1,5 +1,31 @@
 import { prisma } from "../config/prisma.js";
 
+export const viewallAppointments = async (req, res) => {
+  try {
+    // Find appointments using Patient.id
+    const appointments = await prisma.appointment.findMany({
+      include: {
+        doctor: true,
+        patient: true,
+      },
+      orderBy: {
+        appointmentDate: "desc",
+      },
+    });
+
+    res.status(200).json({
+      message: "Successfully fetched all appointments",
+      appointments,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Failed to fetch appointments",
+    });
+  }
+};
+
 // view appointment by doctor
 export const viewDoctorAppointments = async (req, res) => {
   try {
@@ -149,61 +175,61 @@ export const bookAppointment = async (req, res) => {
 };
 
 // fetch all appointment data of that patient to doctor
-export const viewallAppointments = async (req, res) => {
-  try {
-    const userId = req.session.userId;
+// export const viewallAppointments = async (req, res) => {
+//   try {
+//     const userId = req.session.userId;
 
-    if (!userId) {
-      return res.status(401).json({
-        message: "User not authenticated",
-      });
-    }
+//     if (!userId) {
+//       return res.status(401).json({
+//         message: "User not authenticated",
+//       });
+//     }
 
-    // Find the patient profile belonging to the logged-in user
-    const patientExists = await prisma.patient.findUnique({
-      where: {
-        userId: userId,
-      },
-    });
+//     // Find the patient profile belonging to the logged-in user
+//     const patientExists = await prisma.patient.findUnique({
+//       where: {
+//         userId: userId,
+//       },
+//     });
 
-    if (!patientExists) {
-      return res.status(404).json({
-        message: "Patient profile not found",
-      });
-    }
+//     if (!patientExists) {
+//       return res.status(404).json({
+//         message: "Patient profile not found",
+//       });
+//     }
 
-    // Find appointments using Patient.id
-    const appointments = await prisma.appointment.findMany({
-      where: {
-        patient_id: patientExists.id,
-      },
-      include: {
-        doctor: true,
-        patient: true,
-      },
-      orderBy: {
-        appointmentDate: "desc",
-      },
-    });
+//     // Find appointments using Patient.id
+//     const appointments = await prisma.appointment.findMany({
+//       where: {
+//         patient_id: patientExists.id,
+//       },
+//       include: {
+//         doctor: true,
+//         patient: true,
+//       },
+//       orderBy: {
+//         appointmentDate: "desc",
+//       },
+//     });
 
-    if (appointments.length === 0) {
-      return res.status(404).json({
-        message: "No appointments found",
-      });
-    }
+//     if (appointments.length === 0) {
+//       return res.status(404).json({
+//         message: "No appointments found",
+//       });
+//     }
 
-    res.status(200).json({
-      message: "Successfully fetched all appointments",
-      appointments,
-    });
-  } catch (error) {
-    console.log(error);
+//     res.status(200).json({
+//       message: "Successfully fetched all appointments",
+//       appointments,
+//     });
+//   } catch (error) {
+//     console.log(error);
 
-    res.status(500).json({
-      message: "Failed to fetch appointments",
-    });
-  }
-};
+//     res.status(500).json({
+//       message: "Failed to fetch appointments",
+//     });
+//   }
+// };
 
 // fetch all apoointment which status is completed that is history
 export const appointmentHistory = async (req, res) => {

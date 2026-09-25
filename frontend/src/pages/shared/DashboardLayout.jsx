@@ -10,14 +10,10 @@ const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { profileData } = useUser();
   const { user } = useAuth();
-  // console.log(profileData?.profile);
-
-  // const role = "PATIENT";
 
   const onBordingRequired =
     user.role === "PATIENT" && !profileData?.profile?.isOnboarded;
-  // const onBordingRequired = false;
-  // console.log("User profile data", profileData);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}

@@ -10,9 +10,12 @@ import Card from "../../components/common/Card";
 import AvailableDoctor from "../../components/layout/AvailableDoctor";
 import PatientLineChart from "../../components/layout/PatientLineChart";
 import Table from "../../components/common/Table";
+import { useEffect, useState } from "react";
+import api from "../../lib/axios";
 
 const PatientDashboard = () => {
- 
+  const [availableDoctors, setAvailableDoctors] = useState(null || []);
+  const [loading, setLoading] = useState(false);
 
   const cardItems = [
     {
@@ -131,7 +134,22 @@ const PatientDashboard = () => {
     },
   ];
 
+  const fetchAvailableDoctors = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get("/doctors/allDoctors/available");
+      setAvailableDoctors(response.data.doctors);
+    } catch (error) {
+      console.log("Failed to fetch available doctors", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchAvailableDoctors();
+  }, []);
 
+  console.log("Available doctors", availableDoctors);
   return (
     <div>
       <h1 className="text-lg md:text-2xl font-semibold">
@@ -153,7 +171,10 @@ const PatientDashboard = () => {
         </div>
 
         <div className="md:col-span-1 min-h-[300px]">
-          <AvailableDoctor />
+          <AvailableDoctor
+            loading={loading}
+            availableDoctors={availableDoctors}
+          />
         </div>
       </div>
       {/* Appointment Table */}

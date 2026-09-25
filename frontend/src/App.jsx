@@ -15,16 +15,19 @@ import Users from "./pages/admin/Users";
 import OnBoard from "./pages/patient/OnBoard";
 import { useAuth } from "./context/authContext";
 import { useUser } from "./context/userContext";
+import Loader from "./components/common/Loader";
 function App() {
   const { loading, user } = useAuth();
   const { loading: profileLoading } = useUser();
-  
+
   if (loading || profileLoading) {
     return (
-      <p className="h-screen flex justify-center items-center">Loading....</p>
+      <p className="h-screen flex justify-center items-center">
+        <Loader />
+      </p>
     );
   }
-  // console.log("user detail", user); 
+  // console.log("user detail", user);
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
