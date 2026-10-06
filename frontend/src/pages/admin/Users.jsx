@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import Table from "../../components/common/Table";
 import { EllipsisVertical, Eye, Search, SquarePen, Trash } from "lucide-react";
 import api from "../../lib/axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState(null || []);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fetchAllUsers = async () => {
     try {
@@ -58,11 +60,28 @@ const Users = () => {
     {
       key: "action",
       header: "action",
-      render: (value) => (
-        <span className="flex flex-col items-center md:flex-row gap-3 cursor-pointer ">
-          <Eye color="#16a34a" size={24} className="hover:scale-110" />
-          <SquarePen color="#4b5563" size={20} className="hover:scale-110" />
-          <Trash color="#dc2626" size={20} className="hover:scale-110" />
+      render: (_, row) => (
+        <span className="flex flex-col items-center md:flex-row gap-3">
+          {/* <Link to={`/dashboard/users/${row.id}`}> */}
+          <Eye
+            color="#16a34a"
+            size={24}
+            className="cursor-pointer hover:scale-110"
+            onClick={() => navigate(`/dashboard/users/${row.id}`)}
+          />
+          {/* </Link> */}
+
+          <SquarePen
+            color="#4b5563"
+            size={20}
+            className="cursor-pointer hover:scale-110"
+          />
+
+          <Trash
+            color="#dc2626"
+            size={20}
+            className="cursor-pointer hover:scale-110"
+          />
         </span>
       ),
     },

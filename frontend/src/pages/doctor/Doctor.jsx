@@ -3,6 +3,7 @@ import Table from "../../components/common/Table";
 import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import AddDoctor from "../doctor/AddDoctor";
 import api from "../../lib/axios";
+import { Link } from "react-router-dom";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
   const [allDoctors, setALLDoctors] = useState(null || []);
@@ -65,11 +66,27 @@ const Doctor = () => {
     {
       key: "action",
       header: "action",
-      render: () => (
-        <span className="flex flex-col items-center md:flex-row gap-3 cursor-pointer ">
-          <Eye color="#16a34a" size={24} className="hover:scale-110" />
-          <SquarePen color="#4b5563" size={20} className="hover:scale-110" />
-          <Trash color="#dc2626" size={20} className="hover:scale-110" />
+      render: (_, row) => (
+        <span className="flex flex-col items-center md:flex-row gap-3">
+          <Link to={`/dashboard/doctors/${row.id}`}>
+            <Eye
+              color="#16a34a"
+              size={24}
+              className="cursor-pointer hover:scale-110"
+            />
+          </Link>
+
+          <SquarePen
+            color="#4b5563"
+            size={20}
+            className="cursor-pointer hover:scale-110"
+          />
+
+          <Trash
+            color="#dc2626"
+            size={20}
+            className="cursor-pointer hover:scale-110"
+          />
         </span>
       ),
     },

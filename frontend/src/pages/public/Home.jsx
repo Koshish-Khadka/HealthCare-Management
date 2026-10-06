@@ -3,9 +3,9 @@ import Login from "../auth/Login";
 
 const Home = () => {
   return (
-    <div>
+    <>
       <Login />
-    </div>
+    </>
   );
 };
 

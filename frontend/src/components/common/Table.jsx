@@ -4,9 +4,9 @@ import Loader from "./Loader";
 const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
   if (loading) {
     return (
-      <p className="pt-10 flex justify-center ">
+      <div className="pt-10 flex justify-center ">
         <Loader />
-      </p>
+      </div>
     );
   }
   return (

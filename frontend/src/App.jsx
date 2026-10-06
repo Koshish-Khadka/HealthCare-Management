@@ -16,15 +16,18 @@ import OnBoard from "./pages/patient/OnBoard";
 import { useAuth } from "./context/authContext";
 import { useUser } from "./context/userContext";
 import Loader from "./components/common/Loader";
+import PatientDetail from "./pages/patient/PatientDetail";
+import DoctorDetail from "./pages/doctor/DoctorDetail";
+import UserDetailPage from "./pages/admin/UserDetailPage";
 function App() {
   const { loading, user } = useAuth();
   const { loading: profileLoading } = useUser();
 
   if (loading || profileLoading) {
     return (
-      <p className="h-screen flex justify-center items-center">
+      <div className="h-screen flex justify-center items-center">
         <Loader />
-      </p>
+      </div>
     );
   }
   // console.log("user detail", user);
@@ -39,9 +42,12 @@ function App() {
           <Route path="on-board" element={<OnBoard />} />
           <Route path="appointments" element={<Appointment />} />
           <Route path="users" element={<Users />} />
+          <Route path="users/:userId" element={<UserDetailPage />} />
           <Route path="patients" element={<Patient />} />
+          <Route path="patients/:patientId" element={<PatientDetail />} />
           <Route path="self" element={<Profile />} />
           <Route path="doctors" element={<Doctor />} />
+          <Route path="doctors/:doctorId" element={<DoctorDetail />} />
           <Route path="medical-records" element={<MedicalRecords />} />
           <Route path="billing" element={<Billing />} />
         </Route>

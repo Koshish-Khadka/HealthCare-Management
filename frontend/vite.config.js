@@ -10,4 +10,10 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [tailwindcss()],
+  server: {
+    watch: {
+      usePolling: true, // Forces Vite to poll for changes, fixing the refresh issue
+      
+    },
+  },
 });
