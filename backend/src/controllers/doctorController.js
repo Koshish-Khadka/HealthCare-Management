@@ -13,7 +13,7 @@ export const createDoctor = async (req, res) => {
       phone,
       address,
       department,
-      availability,
+      // availability,
       job_type,
     } = req.body;
 
@@ -67,7 +67,7 @@ export const createDoctor = async (req, res) => {
           phone,
           address,
           department,
-          availability_status: availability,
+          // availability_status: availability,
           job_type,
         },
       });
@@ -161,7 +161,7 @@ export const updateDoctor = async (req, res) => {
       phone,
       address,
       department,
-      availability,
+      // availability,
       job_type,
     } = req.body;
 
@@ -174,7 +174,7 @@ export const updateDoctor = async (req, res) => {
         phone,
         address,
         department,
-        availability,
+        // availability,
         job_type,
       },
     });

@@ -39,12 +39,14 @@ const AddDoctor = ({ onClose }) => {
       setLoading(false);
     }
   };
+
+  // console.log("Add doctor", input);
   return (
     <div>
       <div className="flex justify-between items-center border-b border-stone-300 pb-2">
         <div>
           <h1 className="text-xl font-bold">Add doctor</h1>
-          <p className="text-base text-stone-400 font-light">
+          <p className="text-sm text-stone-500 font-light">
             Register a new Doctor.
           </p>
         </div>
@@ -71,7 +73,7 @@ const AddDoctor = ({ onClose }) => {
               name="username"
               type="text"
               onChange={handleInputChange}
-              placeholder="Enter your username"
+              placeholder="Doctor's username"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -88,7 +90,7 @@ const AddDoctor = ({ onClose }) => {
               name="email"
               type="email"
               onChange={handleInputChange}
-              placeholder="Enter your email"
+              placeholder="Doctor's email"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -105,7 +107,7 @@ const AddDoctor = ({ onClose }) => {
               name="password"
               type="password"
               onChange={handleInputChange}
-              placeholder="Enter your password"
+              placeholder="Doctor's password"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -122,7 +124,7 @@ const AddDoctor = ({ onClose }) => {
               name="specialization"
               type="text"
               onChange={handleInputChange}
-              placeholder="Doctor specialization"
+              placeholder="Doctor's specialization"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -139,7 +141,7 @@ const AddDoctor = ({ onClose }) => {
               name="license_number"
               type="text"
               onChange={handleInputChange}
-              placeholder="Doctor license number"
+              placeholder="Doctor's license number"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -156,7 +158,7 @@ const AddDoctor = ({ onClose }) => {
               name="phone"
               type="number"
               onChange={handleInputChange}
-              placeholder="Contact Number"
+              placeholder="Doctor's Contact Number"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -173,7 +175,7 @@ const AddDoctor = ({ onClose }) => {
               name="address"
               type="text"
               onChange={handleInputChange}
-              placeholder="Enter your address"
+              placeholder="Doctor's address"
               className="w-full h-8 px-3 border border-gray-300 rounded-md text-sm outline-none transition focus:border-[#004B8D] focus:ring-2 focus:ring-[#004B8D]/20"
             />
           </div>
@@ -208,7 +210,7 @@ const AddDoctor = ({ onClose }) => {
               htmlFor="name"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Department
+              Job Type
             </label>
 
             <select

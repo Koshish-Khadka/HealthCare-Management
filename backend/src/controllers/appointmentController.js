@@ -135,7 +135,6 @@ export const updateAppointment = async (req, res) => {
 };
 
 // book appointment by patient
-
 export const bookAppointment = async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -155,10 +154,10 @@ export const bookAppointment = async (req, res) => {
       });
     }
 
-    // book appointment to the doctor
+   
     const appointment = await prisma.appointment.create({
       data: {
-        patient_id: patientExists.id, // the actual id should ne userId from req.session.userId
+        patient_id: patientExists.id, 
         doctor_id,
         appointmentDate,
         time,

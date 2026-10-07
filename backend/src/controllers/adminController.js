@@ -52,3 +52,43 @@ export const allUsers = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch all users", error });
   }
 };
+
+export const createAppointment = async (req, res) => {
+  try {
+    const { patient_id, doctor_id, appointmentDate, time } = req.body;
+
+    if (!patient_id || !doctor_id || !appointmentDate || !time) {
+      return res.status(400).json({
+        message: "All fields are required",
+      });
+    }
+    const patient = await prisma.patient.findUnique({
+      where: {
+        id: patient_id,
+      },
+    });
+
+    if (!patient) {
+      return res.status(404).json({
+        message: "Patient not found",
+      });
+    }
+
+    const appointment = await prisma.appointment.create({
+      data: {
+        patient_id,
+        doctor_id,
+        appointmentDate: new Date(appointmentDate),
+        time,
+      },
+    });
+
+    res.status(201).json({
+      message: "Appointment created successfully",
+      appointment,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to create appointment", error });
+    console.log(error);
+  }
+};
