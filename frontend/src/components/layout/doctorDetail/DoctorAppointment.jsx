@@ -1,6 +1,4 @@
-import React from "react";
 import Table from "../../common/Table";
-import { Eye, SquarePen, Trash } from "lucide-react";
 
 const DoctorAppointment = () => {
   const appointmentColumns = [
@@ -46,17 +44,6 @@ const DoctorAppointment = () => {
           }
         >
           {value}
-        </span>
-      ),
-    },
-    {
-      key: "action",
-      header: "Action",
-      render: () => (
-        <span className="flex flex-col items-center md:flex-row gap-3 cursor-pointer">
-          <Eye color="#16a34a" size={24} className="hover:scale-110" />
-          <SquarePen color="#4b5563" size={20} className="hover:scale-110" />
-          <Trash color="#dc2626" size={20} className="hover:scale-110" />
         </span>
       ),
     },
