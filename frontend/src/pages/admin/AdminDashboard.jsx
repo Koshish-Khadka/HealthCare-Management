@@ -114,11 +114,11 @@ const AdminDashboard = () => {
       {/* piechart and bargraph */}
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3 items-stretch">
-        <div className="w-full md:col-span-2 min-h-[300px]">
+        <div className="w-full md:col-span-2 h-[300px]">
           <BarChart />
         </div>
 
-        <div className="w-full md:col-span-1 min-h-[300px]">
+        <div className="w-full md:col-span-1 h-[300px]">
           {/* <AvailableDoctor /> */}
           <DoughnutChart />
         </div>

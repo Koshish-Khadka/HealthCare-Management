@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import Breadcrumbs from "../../components/common/BreadCrumbs";
 
 const PatientDetail = () => {
   return (
     <div>
-      Patient Detail page
+     
+        <Breadcrumbs />
+      
     </div>
-  )
-}
+  );
+};
 
-export default PatientDetail
+export default PatientDetail;

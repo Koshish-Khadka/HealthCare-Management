@@ -12,11 +12,13 @@ const UserProfileChart = () => {
       },
     ],
   };
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
   return (
-    <div className="mt-4 border h-full p-3 rounded-md border-stone-300 shadow-lg">
-      <div className="w-full min-h-75">
-        <Line data={data} />
-      </div>
+    <div className="w-full h-full border p-3 rounded-md border-stone-300 shadow-lg">
+      <Line data={data} options={options} />
     </div>
   );
 };

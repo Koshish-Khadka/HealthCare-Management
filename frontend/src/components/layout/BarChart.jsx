@@ -39,9 +39,13 @@ const BarChart = () => {
       },
     ],
   };
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
   return (
     <div className="w-full border h-full p-3 rounded-md border-stone-300 shadow-lg">
-      <Bar data={data} className="w-full h-full" />
+      <Bar data={data} options={options} />
     </div>
   );
 };

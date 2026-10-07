@@ -9,6 +9,8 @@ const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
       </div>
     );
   }
+
+  console.log("Data of table", data);
   return (
     <div className="w-full overflow-hidden rounded-lg bg-white mt-4">
       {/* Desktop Header */}
@@ -49,12 +51,10 @@ const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
             >
               {columns.map((column) => (
                 <div key={column.key} className="flex flex-col md:block">
-                  {/* Mobile label */}
                   <span className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 md:hidden">
                     {column.header}
                   </span>
 
-                  {/* Cell */}
                   <div className="text-sm text-gray-600">
                     {column.render
                       ? column.render(row[column.key], row)

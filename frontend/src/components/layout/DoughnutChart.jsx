@@ -18,9 +18,13 @@ const DoughnutChart = () => {
       },
     ],
   };
+    const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
   return (
     <div className="border h-full p-3 rounded-md border-stone-300 shadow-lg">
-      <Doughnut data={data} className="w-full h-full" />
+      <Doughnut data={data} options={options}  />
     </div>
   );
 };
