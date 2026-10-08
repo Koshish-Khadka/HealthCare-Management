@@ -8,6 +8,7 @@ import Breadcrumbs from "../../components/common/BreadCrumbs";
 const Users = () => {
   const [allUsers, setAllUsers] = useState(null || []);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const fetchAllUsers = async () => {
@@ -26,7 +27,11 @@ const Users = () => {
     fetchAllUsers();
   }, []);
 
-  // console.log("All users", allUsers);
+  const filterUsers = allUsers.filter(
+    (user) =>
+      user?.username.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+  
   const userColumns = [
     {
       key: "username",
@@ -103,12 +108,13 @@ const Users = () => {
           </div>
           <input
             type="text"
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-full pl-10 pr-4 py-1 border text-sm border-stone-400 rounded-lg bg-gray-50 text-stone-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Search Users..."
           />
         </div>
       </div>
-      <Table data={allUsers} columns={userColumns} loading={loading} />
+      <Table data={filterUsers} columns={userColumns} loading={loading} />
     </div>
   );
 };

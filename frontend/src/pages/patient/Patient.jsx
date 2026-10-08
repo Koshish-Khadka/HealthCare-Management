@@ -7,15 +7,20 @@ import { usePatient } from "../../context/patientContent";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 
 const Patient = () => {
-  // const [patients, setPatients] = useState(null || []);
-  // const [loading, setLoading] = useState(false);
   const { patientData, loading } = usePatient();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // console.log(patientData);
+  // search feature
+  const searchResult = patientData.filter((patient) =>
+    patient?.first_name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   const patientColumns = [
     {
       key: "id",
       header: "id",
-       render: (_, row, index) => index + 1,
+      render: (_, row, index) => index + 1,
     },
     {
       key: "first_name",
@@ -87,13 +92,14 @@ const Patient = () => {
             </div>
             <input
               type="text"
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search Patients..."
             />
           </div>
         </div>
       </div>
-      <Table data={patientData} columns={patientColumns} loading={loading} />
+      <Table data={searchResult} columns={patientColumns} loading={loading} />
     </div>
   );
 };

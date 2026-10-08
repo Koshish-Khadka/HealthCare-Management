@@ -4,13 +4,13 @@ import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import Table from "../../components/common/Table";
 import { usePatient } from "../../context/patientContent";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
+import { useDoctor } from "../../context/doctorContext";
 
 const Appointment = () => {
   const [allAppointment, setAllAppointment] = useState(null || []);
   const [loading, setLoading] = useState(false);
   const [bookAppointment, setBookAppointment] = useState(false);
-  // const [patients, setPatients] = useState(null || []);
-  const [doctors, setDoctors] = useState(null || []);
+  // const [doctors, setDoctors] = useState(null || []);
   const [input, setInput] = useState({
     patientId: "",
     doctorId: "",
@@ -18,8 +18,9 @@ const Appointment = () => {
     time: "",
   });
   const { patientData } = usePatient();
+  const { doctorData } = useDoctor();
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // console.log("Patient data from context", patientData);
 
   const appointmentColumns = [
     {
@@ -79,6 +80,18 @@ const Appointment = () => {
       ),
     },
   ];
+
+  // console.log(allAppointment);
+  const filterData = allAppointment.filter((data) =>
+    data?.doctor?.name.toLowerCase().includes(
+      searchQuery.toLowerCase(),
+      // ||
+      //   data?.patient?.first_name
+      //     .toLowerCase()
+      //     .includes(searchQuery.toLowerCase()),
+    ),
+  );
+
   const fetchAllAppointment = async () => {
     try {
       setLoading(true);
@@ -91,19 +104,10 @@ const Appointment = () => {
     }
   };
 
-  const fetchAllDoctor = async () => {
-    try {
-      const response = await api.get("/doctors/allDoctors");
-      setDoctors(response.data.doctors);
-    } catch (error) {
-      console.log("Failed to fetch doctor ", error);
-    }
-  };
+
 
   useEffect(() => {
-    // fetchAllPatient();
     fetchAllAppointment();
-    fetchAllDoctor();
   }, []);
 
   const formattedAppointments = allAppointment.map((appointment) => ({
@@ -161,8 +165,9 @@ const Appointment = () => {
             </div>
             <input
               type="text"
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search Users..."
+              placeholder="Search appointment..."
             />
           </div>
           <button
@@ -174,11 +179,7 @@ const Appointment = () => {
           </button>
         </div>
       </div>
-      <Table
-        data={formattedAppointments}
-        columns={appointmentColumns}
-        loading={loading}
-      />
+      <Table data={formattedAppointments} columns={appointmentColumns} loading={loading} />
 
       {bookAppointment && (
         <div
@@ -247,7 +248,7 @@ const Appointment = () => {
                     <option value="" disabled>
                       Select doctor
                     </option>
-                    {doctors.map((doctor) => (
+                    {doctorData.map((doctor) => (
                       <option key={doctor.id} value={doctor.id}>
                         {doctor.name} - {doctor.specialization}
                       </option>
@@ -282,26 +283,6 @@ const Appointment = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-
-                {/* Appointment Type */}
-                {/* <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Appointment Type
-                  </label>
-
-                  <select
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select type
-                    </option>
-                    <option value="CONSULTATION">Consultation</option>
-                    <option value="FOLLOW_UP">Follow-up</option>
-                    <option value="CHECKUP">General Checkup</option>
-                    <option value="EMERGENCY">Emergency</option>
-                  </select>
-                </div> */}
               </div>
 
               {/* Footer */}
