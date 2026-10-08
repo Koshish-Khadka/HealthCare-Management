@@ -23,7 +23,7 @@ const DoughnutChart = () => {
     maintainAspectRatio: false,
   };
   return (
-    <div className="border h-full p-3 rounded-md border-stone-300 shadow-lg">
+    <div className="border h-full p-3 rounded-md border-stone-300 ">
       <Doughnut data={data} options={options}  />
     </div>
   );

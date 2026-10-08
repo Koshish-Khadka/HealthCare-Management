@@ -124,7 +124,7 @@ const AdminDashboard = () => {
         </div>
       </div>
       {/*Users Tables */}
-      <div className="mt-4 border border-stone-300 rounded-md shadow-2xl p-3">
+      <div className="mt-4 border border-stone-300 rounded-md p-3">
         <div className="flex justify-between items-center mb-4 ">
           <div className="space-y-1">
             <h2 className="text-lg text-stone-900 font-semibold">

@@ -3,7 +3,7 @@ import React from "react";
 const Card = ({ item }) => {
   const Icon = item.icon;
   return (
-    <div className="border border-stone-300 shadow-md px-3 py-4 rounded-md">
+    <div className="border border-stone-300  px-3 py-4 rounded-md">
       <div className="flex justify-between items-center">
         <p className="text-base text-stone-700 font-medium">{item.title}</p>
         <div className="border border-stone-300 shadow-2xl p-1.5 rounded-lg">

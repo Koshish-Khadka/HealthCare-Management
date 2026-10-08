@@ -44,7 +44,7 @@ const BarChart = () => {
     maintainAspectRatio: false,
   };
   return (
-    <div className="w-full border h-full p-3 rounded-md border-stone-300 shadow-lg">
+    <div className="w-full border h-full p-3 rounded-md border-stone-300 ">
       <Bar data={data} options={options} />
     </div>
   );

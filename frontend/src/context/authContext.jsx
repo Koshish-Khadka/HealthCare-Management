@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../lib/axios";
 
+
 export const authContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [loading, setLoading] = useState(true);
@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setUser(null);
     setToken(null);
+  
   };
 
   return (

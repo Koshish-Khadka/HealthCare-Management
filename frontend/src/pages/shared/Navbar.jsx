@@ -1,9 +1,15 @@
 import { LogOutIcon, Menu, Search, Settings } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
 const Navbar = ({ setIsOpen }) => {
   const [menu, setMenu] = useState(false);
-  const { user } = useAuth();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <header className="sticky top-0 z-30 h-16 border-b border-stone-200  bg-white">
@@ -27,7 +33,7 @@ const Navbar = ({ setIsOpen }) => {
         </div>
         <div className="relative">
           <div
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#004B8D]"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#004B8D] cursor-pointer"
             onClick={() => setMenu(!menu)}
           >
             <p className="text-white text-sm font-semibold">K</p>
@@ -48,7 +54,10 @@ const Navbar = ({ setIsOpen }) => {
                 <Settings className="w-5 h-5 text-stone-600" />
                 <p className="text-sm font-medium text-stone-600">Settings</p>
               </div>
-              <div className="flex items-center gap-2 py-2 hover:bg-slate-100 cursor-pointer">
+              <div
+                className="flex items-center gap-2 py-2 hover:bg-slate-100 cursor-pointer"
+                onClick={() => handleLogout()}
+              >
                 <LogOutIcon className="w-5 h-5 text-stone-600" />
                 <p className="text-sm font-medium text-stone-600">Logout</p>
               </div>
