@@ -100,13 +100,13 @@ const AdminDashboard = () => {
   ];
   return (
     <div>
-      <h1 className="text-lg md:text-2xl font-semibold">Hospital Overview</h1>
-      <p className="text-[12px] md:text-sm font-light text-stone-600">
+      <h1 className="text-lg md:text-xl font-semibold">Hospital Overview</h1>
+      <p className="text-xs md:text-sm font-light text-stone-600">
         Live snapshot of admissions, capacity, and activity across Clinova
         General.
       </p>
       {/* card sections */}
-      <div className="mt-4 grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {cardItems.map((item) => (
           <Card item={item} key={item.id} />
         ))}
@@ -125,13 +125,14 @@ const AdminDashboard = () => {
       </div>
       {/*Users Tables */}
       <div className="mt-4 border border-stone-300 rounded-md shadow-2xl p-3">
-        <div className="flex justify-between items-center ">
+        <div className="flex justify-between items-center mb-4 ">
           <div className="space-y-1">
-            <h2 className="text-xl text-stone-900 font-medium">
+            <h2 className="text-lg text-stone-900 font-semibold">
               Users Overview{" "}
             </h2>
-            <p className="text-[12px] md:text-sm font-light text-stone-600">
+            <p className="text-xs md:text-sm font-light text-stone-600">
               This tables shows the users detais
+             
             </p>
           </div>
           <Link to={"/dashboard/users"}>

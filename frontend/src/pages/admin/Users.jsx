@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "../../components/common/Table";
-import { EllipsisVertical, Eye, Search, SquarePen, Trash } from "lucide-react";
+import { Eye, Search, SquarePen, Trash } from "lucide-react";
 import api from "../../lib/axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Breadcrumbs from "../../components/common/BreadCrumbs";
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState(null || []);
@@ -88,22 +89,23 @@ const Users = () => {
   ];
   return (
     <div>
-      <div className="flex justify-between items-center p-3 rounded-md bg-white">
-        <p className="text-2xl font-bold">
-          {allUsers.length || 0}{" "}
-          <span className="text-lg font-light">Users</span>
-        </p>
-        <div>
-          <div className="hidden relative w-full max-w-68 lg:block">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-event-none">
-              <Search className="w-4 h-4 text-slate-500" />
-            </div>
-            <input
-              type="text"
-              className="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search Users..."
-            />
+      <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
+        <div className="space-y-1">
+          <Breadcrumbs />
+          <h1 className="text-lg md:text-2xl font-bold">Users</h1>
+          <p className="text-xs md:text-sm font-light text-stone-600">
+            Search, filter, and manage all system users and their accounts.
+          </p>
+        </div>
+        <div className="hidden relative w-full h-8 max-w-68 lg:block">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-event-none">
+            <Search className="w-4 h-4 text-stone-600" />
           </div>
+          <input
+            type="text"
+            className="w-full h-full pl-10 pr-4 py-1 border text-sm border-stone-400 rounded-lg bg-gray-50 text-stone-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Search Users..."
+          />
         </div>
       </div>
       <Table data={allUsers} columns={userColumns} loading={loading} />

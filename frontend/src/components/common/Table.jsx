@@ -40,7 +40,7 @@ const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
             {emptyMessage}
           </div>
         ) : (
-          data.map((row) => (
+          data.map((row,index) => (
             <div
               key={row.id}
               className="flex flex-col gap-4 bg-white p-4 transition-colors hover:bg-gray-50 md:grid md:items-center md:gap-0 md:px-4 md:py-3"
@@ -58,7 +58,7 @@ const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
 
                   <div className="text-xs text-gray-600">
                     {column.render
-                      ? column.render(row[column.key], row)
+                      ? column.render(row[column.key], row,index)
                       : row[column.key]}
                   </div>
                 </div>

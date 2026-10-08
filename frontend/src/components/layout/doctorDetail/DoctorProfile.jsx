@@ -3,7 +3,7 @@ import React from "react";
 
 const DoctorProfile = () => {
   return (
-    <div className="border border-stone-300 rounded-md  p-3">
+    <div className="border border-stone-300 rounded-md mt-4 p-3">
       <div className="flex justify-between items-center max-w-7xl m-auto">
         <div className="flex items-center  gap-4">
           <div className="flex h-18 w-18 items-center justify-center rounded-full bg-[#004B8D]">
@@ -14,18 +14,18 @@ const DoctorProfile = () => {
               <h1 className="text-lg font-bold">
                 <span>Dr. Sarah Chen</span>
               </h1>
-              <button className=" bg-transparent text-emerald-700 border border-emerald-500 rounded-md px-2 py-1 text-sm font-semibold">
+              <button className="bg-transparent text-emerald-700 border border-emerald-500 rounded-2xl px-2 py-1 text-xs font-semibold">
                 Active
               </button>
             </div>
-            <p className="flex items-center gap-2 text-sm text-stone-600 font-light">
+            <p className="flex items-center gap-2 text-xs text-stone-600 font-light">
               <Mail size={18} /> <span>sarah.chen@clinova.health</span>
             </p>
-            <p className="flex items-center gap-2 text-sm text-stone-600 font-light">
+            <p className="flex items-center gap-2 text-xs text-stone-600 font-light">
               <div className="flex items-center gap-2">
                 <Phone size={18} /> <span>+1 (555) 200-8156</span>
               </div>
-              <div className="flex items-center gap-2 ">
+              <div className="flex items-center gap-2 text-xs text-stone-600 font-light">
                 <ShieldUser size={18} /> <span>Male</span>
               </div>
             </p>

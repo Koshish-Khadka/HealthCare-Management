@@ -4,6 +4,7 @@ import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import AddDoctor from "../doctor/AddDoctor";
 import { Link } from "react-router-dom";
 import { useDoctor } from "../../context/doctorContext";
+import Breadcrumbs from "../../components/common/BreadCrumbs";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
   const { doctorData, loading } = useDoctor();
@@ -12,6 +13,7 @@ const Doctor = () => {
     {
       key: "id",
       header: "id",
+      render: (_, row, index) => index + 1,
     },
     {
       key: "name",
@@ -75,11 +77,14 @@ const Doctor = () => {
   ];
   return (
     <div>
-      <div className="flex justify-between items-center p-3 rounded-md bg-white">
-        <p className="text-2xl font-bold">
-          {doctorData.length || 0}{" "}
-          <span className="text-lg font-light">Doctors</span>
-        </p>
+      <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
+        <div className="space-y-1">
+          <Breadcrumbs />
+          <h1 className="text-lg md:text-2xl font-bold">Doctors</h1>
+          <p className="text-xs md:text-sm font-light text-stone-600">
+            Search, filter, and manage doctors, specialties, and availability.
+          </p>
+        </div>
         <div className="flex items-center gap-4">
           <div className="hidden relative w-full max-w-68 lg:block">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-event-none">
@@ -100,9 +105,6 @@ const Doctor = () => {
           </button>
         </div>
       </div>
-
-      <div className="flex items-end justify-end"></div>
-
       <div>
         <Table data={doctorData} columns={doctorColumns} loading={loading} />
       </div>

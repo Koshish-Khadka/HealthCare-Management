@@ -4,7 +4,7 @@ import UserProfile from "../../components/layout/userDetail/UserProfile";
 const UserDetailPage = () => {
   return (
     <div>
-      <div className="flex ">
+      <div className="mb-4">
         <BreadCrumbs />
       </div>
       <div>

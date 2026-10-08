@@ -4,6 +4,7 @@ import api from "../../lib/axios";
 import { Eye, Search, SquarePen, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePatient } from "../../context/patientContent";
+import Breadcrumbs from "../../components/common/BreadCrumbs";
 
 const Patient = () => {
   // const [patients, setPatients] = useState(null || []);
@@ -14,6 +15,7 @@ const Patient = () => {
     {
       key: "id",
       header: "id",
+       render: (_, row, index) => index + 1,
     },
     {
       key: "first_name",
@@ -68,29 +70,16 @@ const Patient = () => {
     },
   ];
 
-  // const fetchAllPatient = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await api.get("/patients/allPatients");
-  //     setPatients(response.data.patients);
-  //   } catch (error) {
-  //     console.log("Failed to fetch all patients", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchAllPatient();
-  // }, []);
-
   return (
     <div>
-      <div className="flex justify-between items-center p-3 rounded-md bg-white">
-        <p className="text-2xl font-bold">
-          {patientData.length || 0}{" "}
-          <span className="text-lg font-light">Patients</span>
-        </p>
+      <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
+        <div className="space-y-1">
+          <Breadcrumbs />
+          <h1 className="text-lg md:text-2xl font-bold">Patients</h1>
+          <p className="text-xs md:text-sm font-light text-stone-600">
+            Search, filter, and manage patient records and admissions.
+          </p>
+        </div>
         <div>
           <div className="hidden relative w-full max-w-68 lg:block">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-event-none">

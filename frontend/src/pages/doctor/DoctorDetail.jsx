@@ -1,4 +1,4 @@
-import React from "react";
+
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import DoctorProfile from "../../components/layout/doctorDetail/DoctorProfile";
 import DoctorCard from "../../components/common/DoctorCard";

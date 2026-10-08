@@ -3,6 +3,7 @@ import api from "../../lib/axios";
 import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import Table from "../../components/common/Table";
 import { usePatient } from "../../context/patientContent";
+import Breadcrumbs from "../../components/common/BreadCrumbs";
 
 const Appointment = () => {
   const [allAppointment, setAllAppointment] = useState(null || []);
@@ -89,17 +90,6 @@ const Appointment = () => {
       setLoading(false);
     }
   };
-  // const fetchAllPatient = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await api.get("/patients/allPatients");
-  //     setPatients(response.data.patients);
-  //   } catch (error) {
-  //     console.log("Failed to fetch all patients", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const fetchAllDoctor = async () => {
     try {
@@ -156,11 +146,14 @@ const Appointment = () => {
   // console.log("All Apppointment", allAppointment);
   return (
     <div>
-      <div className="flex justify-between items-center p-3 rounded-md bg-white">
-        <p className="text-2xl font-bold">
-          {allAppointment.length || 0}{" "}
-          <span className="text-lg font-light">Appointments</span>
-        </p>
+      <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
+        <div className="space-y-1">
+          <Breadcrumbs />
+          <h1 className="text-lg md:text-2xl font-bold">Appointments</h1>
+          <p className="text-xs md:text-sm font-light text-stone-600">
+            View, schedule, and manage patient appointments.
+          </p>
+        </div>
         <div className="flex items-center gap-4">
           <div className="hidden relative w-full max-w-68 lg:block">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-event-none">
