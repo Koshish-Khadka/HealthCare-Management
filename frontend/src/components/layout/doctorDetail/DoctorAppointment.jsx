@@ -93,7 +93,7 @@ const DoctorAppointment = () => {
   ];
 
   return (
-    <div className="mt-4 rounded-md border border-stone-300 shadow-md p-3">
+    <div className="mt-4 rounded-md border border-stone-300  p-3">
       <Table
         data={appointments}
         columns={appointmentColumns}

@@ -2,6 +2,7 @@ import React from "react";
 import Loader from "./Loader";
 
 const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
+
   if (loading) {
     return (
       <div className="pt-10 flex justify-center ">
@@ -10,12 +11,12 @@ const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
     );
   }
 
-  console.log("Data of table", data);
+
   return (
-    <div className="w-full overflow-hidden rounded-lg bg-white mt-4">
+    <div className="w-full overflow-hidden rounded-lg bg-white ">
       {/* Desktop Header */}
       <div
-        className="hidden md:grid border-b border-gray-200 bg-gray-50 px-6 py-4"
+        className="hidden md:grid border-b border-gray-200 bg-gray-50 px-4 py-2"
         style={{
           gridTemplateColumns: columns
             .map((column) => column.width || "1fr")
@@ -42,7 +43,7 @@ const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
           data.map((row) => (
             <div
               key={row.id}
-              className="flex flex-col gap-4 bg-white p-4 transition-colors hover:bg-gray-50 md:grid md:items-center md:gap-0 md:px-6 md:py-4"
+              className="flex flex-col gap-4 bg-white p-4 transition-colors hover:bg-gray-50 md:grid md:items-center md:gap-0 md:px-4 md:py-3"
               style={{
                 gridTemplateColumns: columns
                   .map((column) => column.width || "1fr")
@@ -55,7 +56,7 @@ const Table = ({ columns, data, loading, emptyMessage = "No data found." }) => {
                     {column.header}
                   </span>
 
-                  <div className="text-sm text-gray-600">
+                  <div className="text-xs text-gray-600">
                     {column.render
                       ? column.render(row[column.key], row)
                       : row[column.key]}

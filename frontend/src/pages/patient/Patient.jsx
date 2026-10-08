@@ -3,10 +3,12 @@ import Table from "../../components/common/Table";
 import api from "../../lib/axios";
 import { Eye, Search, SquarePen, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
+import { usePatient } from "../../context/patientContent";
 
 const Patient = () => {
-  const [patients, setPatients] = useState(null || []);
-  const [loading, setLoading] = useState(false);
+  // const [patients, setPatients] = useState(null || []);
+  // const [loading, setLoading] = useState(false);
+  const { patientData, loading } = usePatient();
 
   const patientColumns = [
     {
@@ -66,27 +68,27 @@ const Patient = () => {
     },
   ];
 
-  const fetchAllPatient = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get("/patients/allPatients");
-      setPatients(response.data.patients);
-    } catch (error) {
-      console.log("Failed to fetch all patients", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchAllPatient = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await api.get("/patients/allPatients");
+  //     setPatients(response.data.patients);
+  //   } catch (error) {
+  //     console.log("Failed to fetch all patients", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchAllPatient();
-  }, []);
+  // useEffect(() => {
+  //   fetchAllPatient();
+  // }, []);
 
   return (
     <div>
       <div className="flex justify-between items-center p-3 rounded-md bg-white">
         <p className="text-2xl font-bold">
-          {patients.length || 0}{" "}
+          {patientData.length || 0}{" "}
           <span className="text-lg font-light">Patients</span>
         </p>
         <div>
@@ -102,7 +104,7 @@ const Patient = () => {
           </div>
         </div>
       </div>
-      <Table data={patients} columns={patientColumns} loading={loading} />
+      <Table data={patientData} columns={patientColumns} loading={loading} />
     </div>
   );
 };

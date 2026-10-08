@@ -8,7 +8,7 @@ const Breadcrumbs = () => {
   let accumulatedPath = "";
 
   return (
-    <nav aria-label="Breadcrumb" className="my-4">
+    <nav aria-label="Breadcrumb" className="mb-4">
       <ol className="flex items-center space-x-2 text-sm text-gray-500 font-medium">
         <li>
           <Link to="/" className="hover:text-blue-600 transition-colors">

@@ -1,31 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Table from "../../components/common/Table";
 import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import AddDoctor from "../doctor/AddDoctor";
-import api from "../../lib/axios";
 import { Link } from "react-router-dom";
+import { useDoctor } from "../../context/doctorContext";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
-  const [allDoctors, setALLDoctors] = useState(null || []);
-
-  // console.log("All doctor details", allDoctors);
-
-  const [loading, setLoading] = useState(false);
-
-  const fetchALLDoctors = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get("/doctors/allDoctors");
-      setALLDoctors(response.data.doctors);
-    } catch (error) {
-      console.log("Failed to fetch doctor ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchALLDoctors();
-  }, []);
+  const { doctorData, loading } = useDoctor();
 
   const doctorColumns = [
     {
@@ -50,11 +31,12 @@ const Doctor = () => {
     {
       key: "department",
       header: "department",
+      width: "1.5fr",
     },
     {
       key: "availability_status",
       header: "availability",
-      width: "1.5fr",
+
       render: (value) => (
         <span
           className={value === "ACTIVE" ? "text-green-600" : "text-red-600"}
@@ -95,7 +77,7 @@ const Doctor = () => {
     <div>
       <div className="flex justify-between items-center p-3 rounded-md bg-white">
         <p className="text-2xl font-bold">
-          {allDoctors.length || 0}{" "}
+          {doctorData.length || 0}{" "}
           <span className="text-lg font-light">Doctors</span>
         </p>
         <div className="flex items-center gap-4">
@@ -122,7 +104,7 @@ const Doctor = () => {
       <div className="flex items-end justify-end"></div>
 
       <div>
-        <Table data={allDoctors} columns={doctorColumns} loading={loading} />
+        <Table data={doctorData} columns={doctorColumns} loading={loading} />
       </div>
 
       {/* Overlay */}

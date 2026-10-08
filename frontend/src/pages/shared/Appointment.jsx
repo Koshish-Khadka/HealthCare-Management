@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import api from "../../lib/axios";
 import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import Table from "../../components/common/Table";
+import { usePatient } from "../../context/patientContent";
 
 const Appointment = () => {
   const [allAppointment, setAllAppointment] = useState(null || []);
   const [loading, setLoading] = useState(false);
   const [bookAppointment, setBookAppointment] = useState(false);
-  const [patients, setPatients] = useState(null || []);
+  // const [patients, setPatients] = useState(null || []);
   const [doctors, setDoctors] = useState(null || []);
   const [input, setInput] = useState({
     patientId: "",
@@ -15,6 +16,9 @@ const Appointment = () => {
     appointmentDate: "",
     time: "",
   });
+  const { patientData } = usePatient();
+
+  // console.log("Patient data from context", patientData);
 
   const appointmentColumns = [
     {
@@ -85,17 +89,17 @@ const Appointment = () => {
       setLoading(false);
     }
   };
-  const fetchAllPatient = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get("/patients/allPatients");
-      setPatients(response.data.patients);
-    } catch (error) {
-      console.log("Failed to fetch all patients", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchAllPatient = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await api.get("/patients/allPatients");
+  //     setPatients(response.data.patients);
+  //   } catch (error) {
+  //     console.log("Failed to fetch all patients", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const fetchAllDoctor = async () => {
     try {
@@ -107,7 +111,7 @@ const Appointment = () => {
   };
 
   useEffect(() => {
-    fetchAllPatient();
+    // fetchAllPatient();
     fetchAllAppointment();
     fetchAllDoctor();
   }, []);
@@ -227,7 +231,7 @@ const Appointment = () => {
                     <option value="" disabled>
                       Select patient
                     </option>
-                    {patients.map((patient) => (
+                    {patientData.map((patient) => (
                       <option key={patient.id} value={patient.id}>
                         {patient.first_name} {patient.last_name}
                       </option>
@@ -328,32 +332,6 @@ const Appointment = () => {
           </div>
         </div>
       )}
-
-      {/* <div
-        className={`
-    fixed right-0 top-0 z-[60]
-    h-screen w-full sm:w-[500px] lg:w-[600px]
-    bg-stone-100 shadow-xl
-    transition-transform duration-300 ease-in-out
-    ${bookAppointment ? "translate-x-0" : "translate-x-full"}
-  `}
-      >
-     
-        <div className="flex items-center justify-between border-b border-stone-300 p-4">
-          <h2 className="text-lg font-semibold">Book Appointment</h2>
-
-          <button
-            onClick={() => setBookAppointment(false)}
-            className="cursor-pointer text-xl text-stone-500 hover:text-stone-800"
-          >
-            ×
-          </button>
-        </div>
-
-        <div className="h-[calc(100vh-65px)] overflow-y-auto p-4">
-          <BookAppointment />
-        </div>
-      </div> */}
     </div>
   );
 };
