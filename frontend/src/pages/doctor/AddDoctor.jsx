@@ -227,7 +227,7 @@ const AddDoctor = ({ onClose }) => {
               <option value="CONTRACT"> Contract </option>
             </select>
           </div>
-          <div className="col-span-2 mt-4 w-full h-10">
+          <div className="fixed bottom-2 right-2 col-span-2 mt-4  h-10">
             <button
               type="submit"
               disabled={loading}

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import Table from "../../components/common/Table";
-import api from "../../lib/axios";
 import { Eye, Search, SquarePen, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePatient } from "../../context/patientContent";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
+import DeletePopUp from "../../components/common/DeletePopUp";
 
 const Patient = () => {
   const { patientData, loading } = usePatient();
   const [searchQuery, setSearchQuery] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   // console.log(patientData);
   // search feature
@@ -69,11 +70,15 @@ const Patient = () => {
             color="#dc2626"
             size={20}
             className="cursor-pointer hover:scale-110"
+            onClick={() => setDeleteDialog(true)}
           />
         </span>
       ),
     },
   ];
+  const handleDeleteDoctor = () => {
+    alert("Patient deleted");
+  };
 
   return (
     <div>
@@ -100,6 +105,17 @@ const Patient = () => {
         </div>
       </div>
       <Table data={searchResult} columns={patientColumns} loading={loading} />
+
+      {deleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <DeletePopUp
+            setDeleteDialog={setDeleteDialog}
+            name={"Peater parker"}
+            title="Delete Patient?"
+            onConfirm={handleDeleteDoctor}
+          />
+        </div>
+      )}
     </div>
   );
 };

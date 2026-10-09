@@ -149,7 +149,7 @@ const PatientDashboard = () => {
     fetchAvailableDoctors();
   }, []);
 
-  console.log("Available doctors", availableDoctors);
+  // console.log("Available doctors", availableDoctors);
   return (
     <div>
       <h1 className="text-lg md:text-2xl font-semibold">

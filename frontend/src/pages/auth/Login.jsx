@@ -115,7 +115,7 @@ const Login = () => {
               disabled={loading}
               className="w-full h-11 bg-[#004B8D] flex justify-center items-center text-white rounded-md font-medium hover:bg-blue-700 transition cursor-pointer"
             >
-              {loading ? <ClipLoader color="white" /> : <p>Login</p>}
+              {loading ? <ClipLoader color="white" size={28}/> : <p>Login</p>}
             </button>
           </form>
 

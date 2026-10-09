@@ -5,10 +5,12 @@ import AddDoctor from "../doctor/AddDoctor";
 import { Link } from "react-router-dom";
 import { useDoctor } from "../../context/doctorContext";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
+import DeletePopUp from "../../components/common/DeletePopUp";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
   const { doctorData, loading } = useDoctor();
   const [searchQuery, setSearchQuery] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   const searchData = doctorData.filter((doctor) =>
     doctor?.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -75,11 +77,15 @@ const Doctor = () => {
             color="#dc2626"
             size={20}
             className="cursor-pointer hover:scale-110"
+            onClick={() => setDeleteDialog(true)}
           />
         </span>
       ),
     },
   ];
+  const handleDeleteDoctor = () => {
+    alert("Doctor deleted");
+  };
   return (
     <div>
       <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
@@ -115,6 +121,18 @@ const Doctor = () => {
         <Table data={searchData} columns={doctorColumns} loading={loading} />
       </div>
 
+      {/* Delete Popup */}
+      {deleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <DeletePopUp
+            setDeleteDialog={setDeleteDialog}
+            name={"Koshish Khadka"}
+            title="Delete doctor?"
+            onConfirm={handleDeleteDoctor}
+          />
+        </div>
+      )}
+
       {/* Overlay */}
       {addDoctorOpen && (
         <div
@@ -134,11 +152,6 @@ const Doctor = () => {
       `}
       >
         {/* Header */}
-
-        {/* Content */}
-        {/* <div className="h-[calc(100vh-65px)] overflow-y-auto p-4">
-        This is add doctor window
-      </div> */}
         <div className="h-[calc(100vh-65px)] overflow-y-auto p-4">
           <AddDoctor onClose={() => setAddDoctorOpen(false)} />
         </div>

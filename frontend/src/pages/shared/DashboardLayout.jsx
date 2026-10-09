@@ -12,7 +12,7 @@ const DashboardLayout = () => {
   const { user } = useAuth();
 
   const onBordingRequired =
-    user.role === "PATIENT" && !profileData?.profile?.isOnboarded;
+    user?.role === "PATIENT" && !profileData?.profile?.isOnboarded;
   // const onBordingRequired = true;
 
   return (

@@ -12,13 +12,16 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import { useUser } from "../../context/userContext";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const allRoles = ["ADMIN", "DOCTOR", "PATIENT"];
-
   const { user } = useAuth();
+  const { profileData } = useUser();
 
   let role = user.role;
-  // let role = "ADMIN";
+
+  const onBoardingRequired =
+    user?.role === "PATIENT" && !profileData?.profile?.isOnboarded;
 
   const SIDEBAR_LINKS = [
     {
@@ -94,6 +97,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     },
   ];
 
+  const filteredSidebarLinks = onBoardingRequired
+    ? SIDEBAR_LINKS.map((section) => ({
+        ...section,
+        links: section.links.filter((link) => link.name === "Dashboard"),
+      })).filter((section) => section.links.length > 0)
+    : SIDEBAR_LINKS;
+
   const location = useLocation();
   return (
     <>
@@ -114,7 +124,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         {/* menu section */}
         <nav className="flex-1 overflow-y-auto p-4">
           <div className="space-y-6">
-            {SIDEBAR_LINKS.map((section) => {
+            {filteredSidebarLinks.map((section) => {
               const allowedLinks = section.links.filter((link) =>
                 link.access.includes(role),
               );
