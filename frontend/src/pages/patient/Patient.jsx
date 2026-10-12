@@ -5,12 +5,15 @@ import { Link } from "react-router-dom";
 import { usePatient } from "../../context/patientContent";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import DeletePopUp from "../../components/common/DeletePopUp";
+import EditPopUp from "../../components/common/EditPopUp";
 
 const Patient = () => {
   const { patientData, loading } = usePatient();
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
 
+  const [selectedPatient, setSelectedPatient] = useState(null);
   // console.log(patientData);
   // search feature
   const searchResult = patientData.filter((patient) =>
@@ -64,6 +67,7 @@ const Patient = () => {
             color="#4b5563"
             size={20}
             className="cursor-pointer hover:scale-110"
+            onClick={() => handleEdit(row)}
           />
 
           <Trash
@@ -76,8 +80,88 @@ const Patient = () => {
       ),
     },
   ];
+
+  const patientFields = [
+    {
+      name: "first_name",
+      label: "First Name",
+      editable: true,
+      required: true,
+    },
+    {
+      name: "last_name",
+      label: "Last Name",
+      editable: true,
+      required: true,
+    },
+    {
+      name: "date_of_birth",
+      label: "Date of Birth",
+      editable: false,
+    },
+    {
+      name: "gender",
+      label: "Gender",
+      editable: true,
+    },
+    {
+      name: "phone",
+      label: "Phone Number",
+      editable: false,
+    },
+    {
+      name: "marital_status",
+      label: "Marital Status",
+      editable: false,
+    },
+    {
+      name: "address",
+      label: "Address",
+      editable: false,
+    },
+
+    {
+      name: "emergency_contact_name",
+      label: "Emergency Contact Name",
+      editable: false,
+    },
+    {
+      name: "emergency_contact_number",
+      label: "Emergency Contact Number",
+      editable: false,
+    },
+    {
+      name: "relation",
+      label: "Relation",
+      editable: false,
+    },
+    {
+      name: "blood_group",
+      label: "Blood Group",
+      editable: false,
+    },
+    {
+      name: "allergies",
+      label: "Allergies",
+      editable: false,
+    },
+    {
+      name: "createdAt",
+      label: "Joined At",
+      editable: false,
+      type: "date",
+    },
+  ];
+  const handleEdit = (user) => {
+    setSelectedPatient(user);
+    setEditDialog(true);
+  };
+
   const handleDeleteDoctor = () => {
     alert("Patient deleted");
+  };
+  const handleSavePatient = () => {
+    alert("Saved");
   };
 
   return (
@@ -113,6 +197,19 @@ const Patient = () => {
             name={"Peater parker"}
             title="Delete Patient?"
             onConfirm={handleDeleteDoctor}
+          />
+        </div>
+      )}
+
+      {editDialog && selectedPatient && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <EditPopUp
+            setEditDialog={setEditDialog}
+            title="Edit Patient"
+            subtitle="View patient details and update account status"
+            data={selectedPatient}
+            fields={patientFields}
+            onSave={handleSavePatient}
           />
         </div>
       )}

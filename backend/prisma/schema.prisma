@@ -48,16 +48,16 @@ model User {
   password  String
   role      Role       @default(PATIENT)
   status    UserStatus @default(ACTIVE)
+  deletedAt DateTime?
   patient   Patient?
-  isActive  Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   doctor    doctor?
 }
 
 model Patient {
-  id                       String        @id @default(uuid())
-  userId                   String        @unique
+  id                       String    @id @default(uuid())
+  userId                   String    @unique
   first_name               String?
   last_name                String?
   date_of_birth            DateTime?
@@ -68,9 +68,9 @@ model Patient {
   emergency_contact_name   String?
   emergency_contact_number String?
   relation                 String?
-  privacy_consent          Boolean       @default(false)
-  service_consent          Boolean       @default(false)
-  medical_consent          Boolean       @default(false)
+  privacy_consent          Boolean   @default(false)
+  service_consent          Boolean   @default(false)
+  medical_consent          Boolean   @default(false)
   blood_group              String?
   allergies                String?
   medical_conditions       String?
@@ -79,11 +79,13 @@ model Patient {
   insurance_number         String?
   img                      String?
   colorCode                String?
-  isOnboarded              Boolean       @default(false)
-  user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  appointments             Appointment[]
-  created_at               DateTime      @default(now())
-  updated_at               DateTime      @updatedAt
+  isOnboarded              Boolean   @default(false)
+  // user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                     User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  appointments Appointment[]
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
 }
 
 model doctor {
@@ -98,7 +100,7 @@ model doctor {
   department          String?
   availability_status AvailabilityStatus @default(AVAILABLE)
   job_type            JobType            @default(FULL_TIME)
-  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                User               @relation(fields: [userId], references: [id], onDelete: Restrict)
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
   workingDays         WorkingDays[]
@@ -125,6 +127,6 @@ model Appointment {
   status          AppointmentStatus @default(PENDING)
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
-  patient         Patient           @relation(fields: [patient_id], references: [id], onDelete: Cascade)
-  doctor          doctor            @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
+  patient         Patient           @relation(fields: [patient_id], references: [id], onDelete: Restrict)
+  doctor          doctor            @relation(fields: [doctor_id], references: [id], onDelete: Restrict)
 }

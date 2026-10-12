@@ -2,40 +2,32 @@ import { useEffect, useState } from "react";
 import Table from "../../components/common/Table";
 import { Eye, Search, SquarePen, Trash } from "lucide-react";
 import api from "../../lib/axios";
-import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
+import ProfileCircle from "../../components/common/ProfileCircle";
+import DeletePopUp from "../../components/common/DeletePopUp";
+import EditPopUp from "../../components/common/EditPopUp";
+import Switch from "../../components/ui/Switch";
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState(null || []);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const tabs = ["All", "Active", "InActive"];
+  const selectedTab = "All";
 
-  const fetchAllUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get("/admin/users");
-      setAllUsers(response.data.users);
-    } catch (error) {
-      console.log("Failed to fetch all users", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
-
-  const filterUsers = allUsers.filter(
-    (user) =>
-      user?.username.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-  
   const userColumns = [
     {
       key: "username",
       header: "username",
+      render: (value) => (
+        <div className="flex items-center gap-1.5">
+          <ProfileCircle username={value.charAt(0)} />
+          <p>{value}</p>
+        </div>
+      ),
     },
     {
       key: "email",
@@ -56,11 +48,9 @@ const Users = () => {
       key: "status",
       header: "status",
       render: (value) => (
-        <span
-          className={value === "ACTIVE" ? "text-green-600" : "text-red-600"}
-        >
-          {value}
-        </span>
+        <div>
+          <Switch value={value} />
+        </div>
       ),
     },
     {
@@ -73,25 +63,133 @@ const Users = () => {
             color="#16a34a"
             size={24}
             className="cursor-pointer hover:scale-110"
-            onClick={() => navigate(`/dashboard/users/${row.id}`)}
-          />
-          {/* </Link> */}
-
-          <SquarePen
-            color="#4b5563"
-            size={20}
-            className="cursor-pointer hover:scale-110"
-          />
-
-          <Trash
-            color="#dc2626"
-            size={20}
-            className="cursor-pointer hover:scale-110"
+            onClick={() => handleEdit(row)}
           />
         </span>
       ),
     },
   ];
+
+  const userFields = [
+    {
+      name: "username",
+      label: "Username",
+      editable: true,
+      required: true,
+    },
+    {
+      name: "email",
+      label: "Email",
+      editable: false,
+    },
+    {
+      name: "createdAt",
+      label: "Joined At",
+      editable: false,
+      type: "date",
+    },
+    {
+      name: "role",
+      label: "Role",
+      editable: false,
+    },
+    {
+      name: "status",
+      label: "Account Status",
+      editable: false,
+      type: "select",
+      fullWidth: true,
+      options: [
+        { label: "Active", value: "ACTIVE" },
+        { label: "Inactive", value: "INACTIVE" },
+      ],
+    },
+  ];
+
+  //  "id": "7adebf3e-7a86-476b-9776-dbd855642a34",
+  //       "userId": "ab70989b-7e50-4ffa-b4fb-5eceb8c540b7",
+  //       "first_name": "Koshish",
+  //       "last_name": "Khadka",
+  //       "date_of_birth": "2026-09-08T00:00:00.000Z",
+  //       "gender": "male",
+  //       "phone": "9843023686",
+  //       "marital_status": "single",
+  //       "address": "Kapan",
+  //       "emergency_contact_name": "Ram",
+  //       "emergency_contact_number": "9843023686",
+  //       "relation": "father",
+  //       "privacy_consent": true,
+  //       "service_consent": true,
+  //       "medical_consent": true,
+  //       "blood_group": "B+",
+  //       "allergies": "Milk",
+  //       "medical_conditions": "Good",
+  //       "medical_history": null,
+  //       "insurance_provider": "Good Life insurance",
+  //       "insurance_number": "123456789",
+  //       "img": null,
+  //       "colorCode": null,
+  //       "isOnboarded": true,
+  //       "created_at": "2026-09-23T09:35:12.124Z",
+  //       "updated_at": "2026-09-23T09:35:12.124Z"
+
+  const fetchAllUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get("/admin/users");
+      setAllUsers(response.data.users);
+    } catch (error) {
+      console.log("Failed to fetch all users", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // console.log("All user data", allUsers);
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
+
+  const filterUsers = allUsers.filter((user) =>
+    user?.username.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const handleDeleteDoctor = () => {
+    alert("Doctor deleted");
+  };
+
+  const handleSaveUser = () => {
+    alert("Saved");
+  };
+
+  const handleEdit = (user) => {
+    setSelectedUser(user);
+    setEditDialog(true);
+  };
+
+  //   const handleSaveUser = async (formData) => {
+  //   try {
+  //     const response = await api.patch(`/admin/users/${formData.id}`, {
+  //       username: formData.username,
+  //       status: formData.status,
+  //     });
+
+  //     const updatedUser = response.data.user;
+
+  //     setAllUsers((prevUsers) =>
+  //       prevUsers.map((user) =>
+  //         user.id === updatedUser.id ? updatedUser : user,
+  //       ),
+  //     );
+
+  //     setSelectedUser(updatedUser);
+  //   } catch (error) {
+  //     console.error("Failed to update user:", error);
+  //     throw error;
+  //   }
+  // };
+
   return (
     <div>
       <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
@@ -101,6 +199,16 @@ const Users = () => {
           <p className="text-xs md:text-sm font-light text-stone-600">
             Search, filter, and manage all system users and their accounts.
           </p>
+          <div className="flex gap-1 border border-stone-100 bg-stone-100  w-fit rounded-lg px-2 py-1">
+            {tabs.map((item) => (
+              <button
+                key={item}
+                className={`text-xs p-1 rounded-lg text-black ${selectedTab === item ? "font-semibold bg-white" : "font-normal "} `}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="hidden relative w-full h-8 max-w-68 lg:block">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-event-none">
@@ -115,6 +223,28 @@ const Users = () => {
         </div>
       </div>
       <Table data={filterUsers} columns={userColumns} loading={loading} />
+      {deleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <DeletePopUp
+            setDeleteDialog={setDeleteDialog}
+            name={"Koshish Khadka"}
+            title="Delete doctor?"
+            onConfirm={handleDeleteDoctor}
+          />
+        </div>
+      )}
+      {editDialog && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <EditPopUp
+            setEditDialog={setEditDialog}
+            title="Edit User"
+            subtitle="View user details and update account status"
+            data={selectedUser}
+            fields={userFields}
+            onSave={handleSaveUser}
+          />
+        </div>
+      )}
     </div>
   );
 };

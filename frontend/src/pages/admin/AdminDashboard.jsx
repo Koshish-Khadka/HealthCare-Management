@@ -12,6 +12,7 @@ import Table from "../../components/common/Table";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../lib/axios";
+import ProfileCircle from "../../components/common/ProfileCircle";
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null || []);
@@ -71,6 +72,12 @@ const AdminDashboard = () => {
     {
       key: "username",
       header: "username",
+      render: (value) => (
+        <div className="flex items-center gap-1.5">
+          <ProfileCircle username={value.charAt(0)} />
+          <p>{value}</p>
+        </div>
+      ),
     },
     {
       key: "email",
@@ -132,7 +139,6 @@ const AdminDashboard = () => {
             </h2>
             <p className="text-xs md:text-sm font-light text-stone-600">
               This tables shows the users detais
-             
             </p>
           </div>
           <Link to={"/dashboard/users"}>

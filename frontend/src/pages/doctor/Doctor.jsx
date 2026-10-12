@@ -6,11 +6,14 @@ import { Link } from "react-router-dom";
 import { useDoctor } from "../../context/doctorContext";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import DeletePopUp from "../../components/common/DeletePopUp";
+import EditPopUp from "../../components/common/EditPopUp";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
   const { doctorData, loading } = useDoctor();
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   const searchData = doctorData.filter((doctor) =>
     doctor?.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -71,6 +74,7 @@ const Doctor = () => {
             color="#4b5563"
             size={20}
             className="cursor-pointer hover:scale-110"
+            onClick={() => handleEdit(row)}
           />
 
           <Trash
@@ -83,8 +87,87 @@ const Doctor = () => {
       ),
     },
   ];
+
+  const doctorFields = [
+    {
+      name: "name",
+      label: "Name",
+      editable: true,
+      required: true,
+    },
+    {
+      name: "email",
+      label: "Email",
+      editable: false,
+    },
+    {
+      name: "specialization",
+      label: "Specialization",
+      editable: false,
+      type: "select",
+      fullWidth: true,
+      options: [
+        { label: "Active", value: "ACTIVE" },
+        { label: "Inactive", value: "INACTIVE" },
+      ],
+    },
+    {
+      name: "license_number",
+      label: "License Number",
+      editable: false,
+    },
+    {
+      name: "phone",
+      label: "Phone Number",
+      editable: false,
+    },
+    {
+      name: "address",
+      label: "Address",
+      editable: false,
+    },
+
+    {
+      name: "availability_status",
+      label: "Availability Status",
+      editable: false,
+      type: "select",
+      fullWidth: true,
+      options: [
+        { label: "Active", value: "ACTIVE" },
+        { label: "Inactive", value: "INACTIVE" },
+      ],
+    },
+    {
+      name: "job_type",
+      label: "Job Type",
+      editable: false,
+      type: "select",
+      fullWidth: true,
+      options: [
+        { label: "Full Time", value: "FULL_TIME" },
+        { label: "Part TIme", value: "PART_TIME" },
+        { label: "Contract", value: "CONTRACT" },
+      ],
+    },
+    {
+      name: "createdAt",
+      label: "Joined At",
+      editable: false,
+      type: "date",
+    },
+  ];
+  
   const handleDeleteDoctor = () => {
     alert("Doctor deleted");
+  };
+
+  const handleEdit = (user) => {
+    setSelectedDoctor(user);
+    setEditDialog(true);
+  };
+  const handleDoctorSave = () => {
+    alert("Data saved");
   };
   return (
     <div>
@@ -129,6 +212,20 @@ const Doctor = () => {
             name={"Koshish Khadka"}
             title="Delete doctor?"
             onConfirm={handleDeleteDoctor}
+          />
+        </div>
+      )}
+
+      {/* edit  */}
+      {editDialog && selectedDoctor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <EditPopUp
+            setEditDialog={setEditDialog}
+            title={"Doctor Details"}
+            subtitle={"Modify the fields below and save to update this doctor."}
+            data={selectedDoctor}
+            fields={doctorFields}
+            onSave={handleDoctorSave}
           />
         </div>
       )}

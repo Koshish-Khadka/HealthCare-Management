@@ -5,12 +5,14 @@ import Table from "../../components/common/Table";
 import { usePatient } from "../../context/patientContent";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import { useDoctor } from "../../context/doctorContext";
+import DeletePopUp from "../../components/common/DeletePopUp";
 
 const Appointment = () => {
   const [allAppointment, setAllAppointment] = useState(null || []);
   const [loading, setLoading] = useState(false);
   const [bookAppointment, setBookAppointment] = useState(false);
-  // const [doctors, setDoctors] = useState(null || []);
+  const [deleteDialog, setDeleteDialog] = useState(false);
+
   const [input, setInput] = useState({
     patientId: "",
     doctorId: "",
@@ -20,7 +22,6 @@ const Appointment = () => {
   const { patientData } = usePatient();
   const { doctorData } = useDoctor();
   const [searchQuery, setSearchQuery] = useState("");
-
 
   const appointmentColumns = [
     {
@@ -75,11 +76,20 @@ const Appointment = () => {
         <span className="flex flex-col items-center md:flex-row gap-3 cursor-pointer">
           <Eye color="#16a34a" size={24} className="hover:scale-110" />
           <SquarePen color="#4b5563" size={20} className="hover:scale-110" />
-          <Trash color="#dc2626" size={20} className="hover:scale-110" />
+          <Trash
+            color="#dc2626"
+            size={20}
+            className="hover:scale-110"
+            onClick={() => setDeleteDialog(true)}
+          />
         </span>
       ),
     },
   ];
+
+  const handleAppointmentDelete = () => {
+    alert("Patient deleted");
+  };
 
   // console.log(allAppointment);
   const filterData = allAppointment.filter((data) =>
@@ -103,8 +113,6 @@ const Appointment = () => {
       setLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     fetchAllAppointment();
@@ -179,7 +187,23 @@ const Appointment = () => {
           </button>
         </div>
       </div>
-      <Table data={formattedAppointments} columns={appointmentColumns} loading={loading} />
+      <Table
+        data={formattedAppointments}
+        columns={appointmentColumns}
+        loading={loading}
+      />
+
+      {/* delete dialog */}
+      {deleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <DeletePopUp
+            setDeleteDialog={setDeleteDialog}
+            name={"John "}
+            title="Delete Appointment?"
+            onConfirm={handleAppointmentDelete}
+          />
+        </div>
+      )}
 
       {bookAppointment && (
         <div
