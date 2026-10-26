@@ -2,30 +2,13 @@ import React from "react";
 import Table from "../../components/common/Table";
 import { useUser } from "../../context/userContext";
 import { useAuth } from "../../context/authContext";
+import Breadcrumbs from "../../components/common/BreadCrumbs";
+import { FileText, Mail, Phone, Shield, User } from "lucide-react";
+
 
 const Profile = () => {
   const { profileData } = useUser();
   const { user } = useAuth();
-
-  // const patientData = {
-  //   first_name: "John",
-  //   last_name: "Doe",
-  //   date_of_birth: "1994-05-15",
-  //   gender: "MALE",
-  //   phone: "+1-555-0199",
-  //   email: "john.doe@example.com",
-  //   marital_status: "Single",
-  //   address: "123 Health Science Way, Suite 400, New York, NY 10001",
-  //   emergency_contact_name: "Jane Doe",
-  //   emergency_contact_number: "+1-555-0144",
-  //   relation: "Spouse",
-  //   blood_group: "O-Positive",
-  //   allergies: "Penicillin, Peanuts",
-  //   medical_conditions: "Mild Seasonal Asthma",
-  //   medical_history: "Appendectomy in 2018",
-  //   insurance_provider: "Blue Cross Blue Shield",
-  //   insurance_number: "XYZ-987654321",
-  // };
 
   const medicalRecords = [
     {
@@ -57,123 +40,167 @@ const Profile = () => {
     {
       key: "LABTEST",
       header: "LABTEST",
-      // render: (value) => (
-      //   <span
-      //     className={value === "ACTIVE" ? "text-green-600" : "text-red-600"}
-      //   >
-      //     {value}
-      //   </span>
-      // ),
     },
   ];
+  let loading = false;
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="border border-stone-300 p-3 rounded-md shadow-md md:col-span-1 ">
-          <div className="flex flex-col justify-center items-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#004B8D]">
-              <p className="text-white text-sm font-semibold">K</p>
+      <Breadcrumbs />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+        <div className="rounded-md border border-stone-200 bg-white p-5 shadow-sm">
+          <div className="flex flex-col items-center text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#004B8D] text-xl font-semibold text-white">
+              {user?.username?.charAt(0).toUpperCase() || "U"}
             </div>
-            <div className="space-y-2 text-center mt-2">
-              <p className="text-xl font-semibold text-stone-800">
-                {user.username}
-              </p>
-              <p className="text-xs font-light text-stone-400">{user.email}</p>
-              <p className="text-lg font-semibold text-stone-800">0</p>
-              <p className="text-sm font-semibold">Appointments</p>
-            </div>
+
+            <h2 className="mt-3 text-lg font-semibold text-stone-800">
+              {user?.username || "Patient"}
+            </h2>
+
+            <p className="mt-1 flex items-center gap-2 text-sm text-stone-500">
+              <Mail size={16} />
+              {user?.email || "No email available"}
+            </p>
+
+            <span className="mt-3 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-[#004B8D]">
+              Patient
+            </span>
           </div>
         </div>
-        <div className="border border-stone-300 p-4 rounded-md shadow-md md:col-span-3">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {/* personal information */}
+        <div className="border border-stone-200 p-4 rounded-md bg-white shadow-sm md:col-span-3">
+          <div className="border-b-2 border-b-stone-300 pb-2">
+            <h2 className="flex items-center gap-2 text-lg font-bold">
+              <User aria-hidden="true" size={25} />
+              <p>Personal Information</p>
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4">
             <div>
               <p className="text-xs text-stone-500">First Name</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.first_name}
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Koshish
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Last Name</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.last_name}
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Koshish
               </p>
             </div>
             <div>
+              <p className="text-xs text-stone-500"> Medical Condition</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Good
+              </p>
+            </div>
+
+            <div>
               <p className="text-xs text-stone-500">Date of Birth</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.date_of_birth}
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                21 Dec 2002
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Gender</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.gender}
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Male
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Phone</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.phone}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-stone-500">Email</p>
-              <p className="font-medium text-base max-w-16">
-                {profileData?.email}
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                9843923686
               </p>
             </div>
             <div>
               <p className="text-xs text-stone-500">Marital Status</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.marital_status}
-              </p>
-            </div>{" "}
-            <div>
-              <p className="text-xs text-stone-500">Emergency Contact Name</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.emergency_contact_name}
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Single
               </p>
             </div>
             <div>
-              <p className="text-xs text-stone-500">Emergency Contact Number</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.emergency_contact_number}
+              <p className="text-xs text-stone-500">Address</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Kathmandu
+              </p>
+            </div>
+            {/* <div>
+              <p className="text-xs text-stone-500">Email</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                koshish123@gmail.com
+              </p>
+            </div> */}
+          </div>
+        </div>
+        {/* Emergency information */}
+        <div className="border border-stone-200 p-4 rounded-md bg-white shadow-sm  md:col-span-2">
+          <div className="border-b-2 border-b-stone-300 pb-2">
+            <h2 className="flex items-center gap-2 text-lg font-bold">
+              <Phone aria-hidden="true" size={25} />
+              <p>Emergency Contact</p>
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3  pt-4">
+            <div>
+              <p className="text-xs text-stone-500">Name</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Balen Shah
               </p>
             </div>
             <div>
-              <p className="text-xs text-stone-500">Blood Group</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.blood_group}
+              <p className="text-xs text-stone-500">Relationship</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Guardian
               </p>
             </div>
             <div>
-              <p className="text-xs text-stone-500">Insurance Provider</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.insurance_provider}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-stone-500">Insurance Number</p>
-              <p className="font-medium text-base">
-                {profileData?.profile.insurance_number}
+              <p className="text-xs text-stone-500"> Phone</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                9843023686
               </p>
             </div>
           </div>
         </div>
-      </div>
-      {/* medical records */}
-      <div className=" mt-4 border border-stone-300 rounded-md shadow-md p-3">
-        <div className="space-y-1">
-          <h2 className="text-xl text-stone-900 font-medium">
-            Medical Records{" "}
-          </h2>
-          <p className="text-[12px] md:text-sm font-light text-stone-600">
-            This tables shows medical Records
-          </p>
+        {/* Insurance information */}
+        <div className="border border-stone-200 p-4 rounded-md bg-white shadow-sm  md:col-span-2">
+          <div className="border-b-2 border-b-stone-300 pb-2">
+            <h2 className="flex items-center gap-2 text-lg font-bold">
+              <Shield aria-hidden="true" size={25} />
+              <p>Insurance Information</p>
+            </h2>
+          </div>
+          <div className="grid grid-cols-2  pt-4">
+            <div>
+              <p className="text-xs text-stone-500">Provider</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                Sudan Insurance pvt ltd
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-stone-500">Provider Number</p>
+              <p className="mt-1 break-all text-sm font-medium text-stone-800">
+                789456123
+              </p>
+            </div>
+          </div>
         </div>
 
-        <Table columns={medicalRecordsColumn} data={medicalRecords} />
-        {/* </div> */}
+        <div className="border border-stone-200 p-4 rounded-md bg-white shadow-sm col-span-4">
+          <div className="border-b-2 border-b-stone-300 pb-2">
+            <h2 className="flex items-center gap-2 text-lg font-bold">
+              <FileText aria-hidden="true" size={25} />
+              <p>Recent Medical Records</p>
+            </h2>
+          </div>
+          {/* Table */}
+          <Table
+            data={medicalRecords}
+            columns={medicalRecordsColumn}
+            loading={loading}
+          />
+        </div>
       </div>
     </>
   );

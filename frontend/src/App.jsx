@@ -19,6 +19,7 @@ import Loader from "./components/common/Loader";
 import PatientDetail from "./pages/patient/PatientDetail";
 import DoctorDetail from "./pages/doctor/DoctorDetail";
 import UserDetailPage from "./pages/admin/UserDetailPage";
+import FindDoctor from "./pages/patient/FindDoctor";
 function App() {
   const { loading, user } = useAuth();
   const { loading: profileLoading } = useUser();
@@ -47,6 +48,7 @@ function App() {
           <Route path="patients/:patientId" element={<PatientDetail />} />
           <Route path="self" element={<Profile />} />
           <Route path="doctors" element={<Doctor />} />
+          <Route path="findDoctor" element={<FindDoctor />} />
           <Route path="doctors/:doctorId" element={<DoctorDetail />} />
           <Route path="medical-records" element={<MedicalRecords />} />
           <Route path="billing" element={<Billing />} />

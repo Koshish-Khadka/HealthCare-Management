@@ -1,47 +1,6 @@
-const AvailableDoctor = ({ loading, availableDoctors }) => {
-  // const doctors = [
-  //   {
-  //     id: 1,
-  //     name: "Dr. Alexander Fleming",
-  //     department: "Immunology",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Dr. Meredith Grey",
-  //     department: "General Surgery",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Dr. Gregory House",
-  //     department: "Diagnostic Medicine",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Dr. Charles Xavier",
-  //     department: "Neurology",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Dr. Strange",
-  //     department: "Neurosurgeon",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Dr. Koshish",
-  //     department: "Neurosurgeon",
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Dr. Koshish",
-  //     department: "Neurosurgeon",
-  //   },
-  //   {
-  //     id: 8,
-  //     name: "Dr. Koshish",
-  //     department: "Neurosurgeon",
-  //   },
-  // ];
+import Badge from "../ui/Badge";
 
+const AvailableDoctor = ({ loading, availableDoctors }) => {
   if (loading) {
     return <p>Loading content ...</p>;
   }
@@ -50,7 +9,7 @@ const AvailableDoctor = ({ loading, availableDoctors }) => {
       <h1 className="text-lg font-medium">Available doctors</h1>
       {availableDoctors.slice(0, 6).map((data) => (
         <div
-          className="flex items-center justify-between mt-2 border border-stone-300 px-3 py-2 rounded-md"
+          className="flex items-center justify-between mt-2 px-3 py-2 rounded-md"
           key={data.id}
         >
           <div className="flex items-center gap-2">
@@ -64,9 +23,9 @@ const AvailableDoctor = ({ loading, availableDoctors }) => {
               </p>
             </div>
           </div>
-          <span className="border border-stone-300 shadow-2xl px-2  rounded-3xl text-[12px]">
-            See Detail
-          </span>
+          <div className="cursor-pointer">
+            <Badge varient={"Brand"} text={"See Detail"} />
+          </div>
         </div>
       ))}
     </div>

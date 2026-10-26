@@ -61,7 +61,7 @@ const Users = () => {
           {/* <Link to={`/dashboard/users/${row.id}`}> */}
           <Eye
             color="#16a34a"
-            size={24}
+            size={18}
             className="cursor-pointer hover:scale-110"
             onClick={() => handleEdit(row)}
           />
@@ -105,33 +105,6 @@ const Users = () => {
       ],
     },
   ];
-
-  //  "id": "7adebf3e-7a86-476b-9776-dbd855642a34",
-  //       "userId": "ab70989b-7e50-4ffa-b4fb-5eceb8c540b7",
-  //       "first_name": "Koshish",
-  //       "last_name": "Khadka",
-  //       "date_of_birth": "2026-09-08T00:00:00.000Z",
-  //       "gender": "male",
-  //       "phone": "9843023686",
-  //       "marital_status": "single",
-  //       "address": "Kapan",
-  //       "emergency_contact_name": "Ram",
-  //       "emergency_contact_number": "9843023686",
-  //       "relation": "father",
-  //       "privacy_consent": true,
-  //       "service_consent": true,
-  //       "medical_consent": true,
-  //       "blood_group": "B+",
-  //       "allergies": "Milk",
-  //       "medical_conditions": "Good",
-  //       "medical_history": null,
-  //       "insurance_provider": "Good Life insurance",
-  //       "insurance_number": "123456789",
-  //       "img": null,
-  //       "colorCode": null,
-  //       "isOnboarded": true,
-  //       "created_at": "2026-09-23T09:35:12.124Z",
-  //       "updated_at": "2026-09-23T09:35:12.124Z"
 
   const fetchAllUsers = async () => {
     try {
@@ -192,9 +165,9 @@ const Users = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
+      <Breadcrumbs />
+      <div className="flex justify-between items-center p-3 rounded-md bg-white my-4 ">
         <div className="space-y-1">
-          <Breadcrumbs />
           <h1 className="text-lg md:text-2xl font-bold">Users</h1>
           <p className="text-xs md:text-sm font-light text-stone-600">
             Search, filter, and manage all system users and their accounts.

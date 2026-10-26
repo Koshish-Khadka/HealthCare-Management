@@ -7,6 +7,7 @@ import { useDoctor } from "../../context/doctorContext";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import DeletePopUp from "../../components/common/DeletePopUp";
 import EditPopUp from "../../components/common/EditPopUp";
+import Badge from "../../components/ui/Badge";
 const Doctor = () => {
   const [addDoctorOpen, setAddDoctorOpen] = useState(false);
   const { doctorData, loading } = useDoctor();
@@ -50,11 +51,10 @@ const Doctor = () => {
       header: "availability",
 
       render: (value) => (
-        <span
-          className={value === "ACTIVE" ? "text-green-600" : "text-red-600"}
-        >
-          {value}
-        </span>
+        <Badge
+          varient={value === "AVAILABLE" ? "Success" : "Warning"}
+          text={value}
+        />
       ),
     },
     {
@@ -65,21 +65,21 @@ const Doctor = () => {
           <Link to={`/dashboard/doctors/${row.id}`}>
             <Eye
               color="#16a34a"
-              size={24}
+              size={20}
               className="cursor-pointer hover:scale-110"
             />
           </Link>
 
           <SquarePen
             color="#4b5563"
-            size={20}
+            size={18}
             className="cursor-pointer hover:scale-110"
             onClick={() => handleEdit(row)}
           />
 
           <Trash
             color="#dc2626"
-            size={20}
+            size={18}
             className="cursor-pointer hover:scale-110"
             onClick={() => setDeleteDialog(true)}
           />
@@ -157,7 +157,7 @@ const Doctor = () => {
       type: "date",
     },
   ];
-  
+
   const handleDeleteDoctor = () => {
     alert("Doctor deleted");
   };
@@ -171,9 +171,9 @@ const Doctor = () => {
   };
   return (
     <div>
-      <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
+      <Breadcrumbs />
+      <div className="flex justify-between items-center p-3 rounded-md bg-white my-4">
         <div className="space-y-1">
-          <Breadcrumbs />
           <h1 className="text-lg md:text-2xl font-bold">Doctors</h1>
           <p className="text-xs md:text-sm font-light text-stone-600">
             Search, filter, and manage doctors, specialties, and availability.

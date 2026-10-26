@@ -9,6 +9,7 @@ import {
   Settings,
   FileText,
   X,
+  UserRoundPlus,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
@@ -68,6 +69,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           to: "/dashboard/appointments",
           access: ["ADMIN", "PATIENT", "DOCTOR"],
           icon: ListOrdered,
+        },
+        {
+          name: "Find Doctor",
+          to: "/dashboard/findDoctor",
+          access: ["PATIENT"],
+          icon: UserRoundPlus,
         },
         {
           name: "Medical Records",

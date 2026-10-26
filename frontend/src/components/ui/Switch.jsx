@@ -4,12 +4,7 @@ const Switch = ({ value }) => {
   
   const isActive = value === "ACTIVE";
 
-//   const handleToggle = () => {
-//     if (onChange) {
-//       // Send back the flipped string value depending on current state
-//       onChange(isActive ? "Inactive" : "Active");
-//     }
-//   };
+
 
   return (
     <div className="flex items-center justify-between gap-4 w-max mt-4">
@@ -33,9 +28,7 @@ const Switch = ({ value }) => {
             transition-transform peer-checked:translate-x-4"
         ></div>
       </label>
-      <span className="text-sm text-slate-900 ">
-        {value}
-      </span>
+   
     </div>
   );
 };

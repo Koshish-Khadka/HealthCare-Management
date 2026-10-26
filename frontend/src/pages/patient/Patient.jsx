@@ -58,21 +58,21 @@ const Patient = () => {
           <Link to={`/dashboard/patients/${row.id}`}>
             <Eye
               color="#16a34a"
-              size={24}
+              size={20}
               className="cursor-pointer hover:scale-110"
             />
           </Link>
 
           <SquarePen
             color="#4b5563"
-            size={20}
+            size={18}
             className="cursor-pointer hover:scale-110"
             onClick={() => handleEdit(row)}
           />
 
           <Trash
             color="#dc2626"
-            size={20}
+            size={18}
             className="cursor-pointer hover:scale-110"
             onClick={() => setDeleteDialog(true)}
           />
@@ -166,9 +166,9 @@ const Patient = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center p-3 rounded-md bg-white mb-4">
+      <Breadcrumbs />
+      <div className="flex justify-between items-center p-3 rounded-md bg-white my-4">
         <div className="space-y-1">
-          <Breadcrumbs />
           <h1 className="text-lg md:text-2xl font-bold">Patients</h1>
           <p className="text-xs md:text-sm font-light text-stone-600">
             Search, filter, and manage patient records and admissions.
