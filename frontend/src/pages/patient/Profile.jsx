@@ -5,7 +5,6 @@ import { useAuth } from "../../context/authContext";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import { FileText, Mail, Phone, Shield, User } from "lucide-react";
 
-
 const Profile = () => {
   const { profileData } = useUser();
   const { user } = useAuth();
@@ -13,6 +12,30 @@ const Profile = () => {
   const medicalRecords = [
     {
       id: 1,
+      DATE: "2026-09-10",
+      TIME: "02:00 PM",
+      DOCTOR: "Dr. Meredith Grey",
+      DIAGNOSIS: "HeadAche",
+      LABTEST: "PENDING",
+    },
+    {
+      id: 2,
+      DATE: "2026-09-10",
+      TIME: "02:00 PM",
+      DOCTOR: "Dr. Meredith Grey",
+      DIAGNOSIS: "HeadAche",
+      LABTEST: "PENDING",
+    },
+    {
+      id: 3,
+      DATE: "2026-09-10",
+      TIME: "02:00 PM",
+      DOCTOR: "Dr. Meredith Grey",
+      DIAGNOSIS: "HeadAche",
+      LABTEST: "PENDING",
+    },
+    {
+      id: 4,
       DATE: "2026-09-10",
       TIME: "02:00 PM",
       DOCTOR: "Dr. Meredith Grey",
@@ -188,7 +211,7 @@ const Profile = () => {
         </div>
 
         <div className="border border-stone-200 p-4 rounded-md bg-white shadow-sm col-span-4">
-          <div className="border-b-2 border-b-stone-300 pb-2">
+          <div className="border-b-2 border-b-stone-300 pb-2 mb-4">
             <h2 className="flex items-center gap-2 text-lg font-bold">
               <FileText aria-hidden="true" size={25} />
               <p>Recent Medical Records</p>

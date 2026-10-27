@@ -5,6 +5,7 @@ import { useState } from "react";
 import OnBoard from "../patient/OnBoard";
 import { useUser } from "../../context/userContext";
 import { useAuth } from "../../context/authContext";
+import OnboardDoctor from "../doctor/OnboardDoctor";
 
 const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,21 @@ const DashboardLayout = () => {
 
   const onBordingRequired =
     user?.role === "PATIENT" && !profileData?.profile?.isOnboarded;
-  // const onBordingRequired = true;
+
+  const onBoardingDoctorRequired =
+    user?.role === "DOCTOR" &&
+    (!profileData?.profile?.workingDays ||
+      profileData.profile.workingDays.length === 0);
+
+  const renderContent = () => {
+    if (onBordingRequired) {
+      return <OnBoard />;
+    }
+    if (onBoardingDoctorRequired) {
+      return <OnboardDoctor />;
+    }
+    return <Outlet />;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -25,9 +40,7 @@ const DashboardLayout = () => {
         {/* Navbar */}
         <Navbar setIsOpen={setIsOpen} />
         {/* Page Content */}
-        <main className="min-w-0 p-4 sm:p-6">
-          {onBordingRequired ? <OnBoard /> : <Outlet />}
-        </main>
+        <main className="min-w-0 p-4 sm:p-6">{renderContent()}</main>
       </div>
     </div>
   );

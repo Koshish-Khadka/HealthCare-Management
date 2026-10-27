@@ -182,7 +182,7 @@ const AdminAppointment = () => {
             onClick={() => setBookAppointment(true)}
           >
             <Plus size={18} />
-            Book Appointment
+            Create Appointment
           </button>
         </div>
       </div>

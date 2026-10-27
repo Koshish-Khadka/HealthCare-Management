@@ -24,6 +24,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const onBoardingRequired =
     user?.role === "PATIENT" && !profileData?.profile?.isOnboarded;
 
+  const onBoardingDoctorRequired =
+    user?.role === "DOCTOR" &&
+    (!profileData?.profile?.workingDays ||
+      profileData.profile.workingDays.length === 0);
+
   const SIDEBAR_LINKS = [
     {
       label: "MENU",
@@ -104,12 +109,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     },
   ];
 
-  const filteredSidebarLinks = onBoardingRequired
-    ? SIDEBAR_LINKS.map((section) => ({
-        ...section,
-        links: section.links.filter((link) => link.name === "Dashboard"),
-      })).filter((section) => section.links.length > 0)
-    : SIDEBAR_LINKS;
+  const filteredSidebarLinks =
+    onBoardingRequired || onBoardingDoctorRequired
+      ? SIDEBAR_LINKS.map((section) => ({
+          ...section,
+          links: section.links.filter((link) => link.name === "Dashboard"),
+        })).filter((section) => section.links.length > 0)
+      : SIDEBAR_LINKS;
 
   const location = useLocation();
   return (

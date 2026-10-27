@@ -1,12 +1,13 @@
-
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import DoctorProfile from "../../components/layout/doctorDetail/DoctorProfile";
 import DoctorCard from "../../components/common/DoctorCard";
 import { Building, Trophy, Users } from "lucide-react";
 import DoctorSchedule from "../../components/layout/doctorDetail/DoctorSchedule";
 import DoctorAppointment from "../../components/layout/doctorDetail/DoctorAppointment";
+import { useAuth } from "../../context/authContext";
 
 const DoctorDetail = () => {
+  const { user } = useAuth();
   const cardItems = [
     {
       id: 1,
@@ -41,7 +42,7 @@ const DoctorDetail = () => {
         ))}
       </div>
       <DoctorSchedule />
-      <DoctorAppointment />
+      {user.role === "ADMIN" ? <DoctorAppointment /> : null}
     </div>
   );
 };

@@ -84,44 +84,27 @@ export const createDoctor = async (req, res) => {
 
 export const addWorkingDays = async (req, res) => {
   try {
-    const workingDays = await prisma.workingDay.createMany({
-      data: [
-        {
-          doctorId: "doctor-123",
-          day: "Monday",
-          startTime: "09:00",
-          endTime: "17:00",
-        },
-        {
-          doctorId: "doctor-123",
-          day: "Tuesday",
-          startTime: "09:00",
-          endTime: "17:00",
-        },
-        {
-          doctorId: "doctor-123",
-          day: "Wednesday",
-          startTime: "09:00",
-          endTime: "13:00",
-        },
-        {
-          doctorId: "doctor-123",
-          day: "Thursday",
-          startTime: "09:00",
-          endTime: "17:00",
-        },
-        {
-          doctorId: "doctor-123",
-          day: "Friday",
-          startTime: "09:00",
-          endTime: "15:00",
-        },
-      ],
+    console.log("Working days controller");
+    const { doctor_id, schedule } = req.body;
+
+    // Optional: Delete existing days if this is an update rather than just onboarding
+    await prisma.workingDays.deleteMany({
+      where: { doctor_id: doctor_id },
     });
-    res.status(200).json({ workingDays });
+    const workingDaysData = schedule.map((slot) => ({
+      doctor_id: doctor_id,
+      day: slot.day,
+      start_time: slot.start_time,
+      close_time: slot.close_time,
+    }));
+    await prisma.workingDays.createMany({
+      data: workingDaysData,
+    });
+
+    res.status(201).json({ message: "Schedule saved successfully" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Failed to add working days" });
+    res.status(500).json({ message: "Failed to add working days", error });
   }
 };
 

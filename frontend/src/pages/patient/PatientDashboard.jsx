@@ -7,11 +7,11 @@ import {
 } from "lucide-react";
 
 import Card from "../../components/common/Card";
-import AvailableDoctor from "../../components/layout/AvailableDoctor";
-import PatientLineChart from "../../components/layout/PatientLineChart";
 import Table from "../../components/common/Table";
 import { useEffect, useState } from "react";
 import api from "../../lib/axios";
+import PatientBarChart from "../../components/layout/PatientBarChart";
+import AvailableDoctor from "../../components/layout/AvailableDoctor";
 
 const PatientDashboard = () => {
   const [availableDoctors, setAvailableDoctors] = useState(null || []);
@@ -167,7 +167,8 @@ const PatientDashboard = () => {
       {/* table and available doctors */}
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3 items-stretch">
         <div className="md:col-span-2 min-h-[300px]">
-          <PatientLineChart />
+          {/* <PatientLineChart /> */}
+          <PatientBarChart />
         </div>
 
         <div className="md:col-span-1 min-h-[300px]">

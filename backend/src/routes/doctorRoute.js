@@ -2,6 +2,7 @@ import express from "express";
 
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
 import {
+  addWorkingDays,
   createDoctor,
   getAllDoctors,
   getAvailableDoctors,
@@ -15,5 +16,6 @@ router.get("/allDoctors", getAllDoctors);
 router.get("/allDoctors/available", getAvailableDoctors);
 router.get("/:id", getDoctorById);
 router.patch("/updateDoctor/:id", updateDoctor);
+router.post("/working-days", addWorkingDays);
 
 export default router;

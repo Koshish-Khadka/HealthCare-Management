@@ -2,8 +2,6 @@ import { prisma } from "../config/prisma.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-
-
 export const register = async (req, res) => {
   try {
     const { username, email, password, confirmPassword } = req.body;
@@ -29,7 +27,6 @@ export const register = async (req, res) => {
     res.status(500).json({ message: "Failed to register user" });
   }
 };
-
 
 export const login = async (req, res) => {
   try {
@@ -173,6 +170,11 @@ export const getMyProfile = async (req, res) => {
       profile = await prisma.doctor.findUnique({
         where: {
           userId: userId,
+        },
+        include: {
+          workingDays: true,
+          appointments: true,
+        
         },
       });
     } else if (user.role === "PATIENT") {
