@@ -5,9 +5,16 @@ import { Building, Trophy, Users } from "lucide-react";
 import DoctorSchedule from "../../components/layout/doctorDetail/DoctorSchedule";
 import DoctorAppointment from "../../components/layout/doctorDetail/DoctorAppointment";
 import { useAuth } from "../../context/authContext";
+import api from "../../lib/axios";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const DoctorDetail = () => {
   const { user } = useAuth();
+  const { doctorId } = useParams();
+  const [doctorScheduleData, setDoctorScheduleData] = useState([]);
+
+
   const cardItems = [
     {
       id: 1,
@@ -31,6 +38,18 @@ const DoctorDetail = () => {
     },
   ];
 
+  const fetchWorkingDays = async () => {
+    try {
+      const response = await api.get(`/doctors/working-days/${doctorId}`);
+      setDoctorScheduleData(response.data);
+    } catch (error) {
+      console.log("Error fetching schedule data", error);
+    }
+  };
+  useEffect(() => {
+    fetchWorkingDays();
+  }, [doctorId]);
+
   return (
     <div>
       {" "}
@@ -41,7 +60,7 @@ const DoctorDetail = () => {
           <DoctorCard key={item.id} item={item} />
         ))}
       </div>
-      <DoctorSchedule />
+      <DoctorSchedule doctorScheduleData={doctorScheduleData}/>
       {user.role === "ADMIN" ? <DoctorAppointment /> : null}
     </div>
   );

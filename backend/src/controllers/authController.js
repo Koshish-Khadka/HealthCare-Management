@@ -24,7 +24,9 @@ export const register = async (req, res) => {
       .status(201)
       .json({ message: "User registered successfully", user: newUser });
   } catch (error) {
-    res.status(500).json({ message: "Failed to register user" });
+    res
+      .status(500)
+      .json({ message: "Failed to register user", error: error.message });
   }
 };
 
@@ -60,7 +62,10 @@ export const login = async (req, res) => {
       .status(200)
       .json({ message: "Login successful", user: safeUser, token });
   } catch (error) {
-    res.status(500).json({ message: "Failed to login user" });
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Failed to login user", error: error.message });
   }
 };
 
@@ -173,8 +178,12 @@ export const getMyProfile = async (req, res) => {
         },
         include: {
           workingDays: true,
-          appointments: true,
-        
+          appointments: {
+            include: {
+              patient: true,
+              doctor: true,
+            },
+          },
         },
       });
     } else if (user.role === "PATIENT") {

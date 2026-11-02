@@ -188,12 +188,23 @@ export const getAvailableDoctors = async (req, res) => {
   }
 };
 
-// export const addDoctorWorkingHours = async (req, res) => {
-//   try {
-//     const userId = req.session.userId;
-//     const { workingHours } = req.body;
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "Failed to add working hours" });
-//   }
-// };
+export const getDoctorWorkingDays = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+
+    console.log("The doctor id is", doctorId);
+
+    const workingDays = await prisma.workingDays.findMany({
+      where: {
+        doctor_id: doctorId,
+      },
+    });
+    res.status(200).json({
+      message: "Successfully fetched working days",
+      workingDays,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to fetch working days", error });
+  }
+};

@@ -1,6 +1,7 @@
 import React from "react";
 
-const DoctorSchedule = () => {
+const DoctorSchedule = ({ doctorScheduleData }) => {
+  console.log("doctor schedule data", doctorScheduleData);
   return (
     <div className="mt-4 p-3 rounded-md border border-stone-300 ">
       <div>
@@ -10,14 +11,16 @@ const DoctorSchedule = () => {
         </p>
       </div>
       {/* grid layout */}
-      <div className="mt-4 grid grid-cols-7 gap-2">
-        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+      <div className="mt-4 flex justify-evenly">
+        {doctorScheduleData?.workingDays?.map((data) => (
           <div
-            key={day}
+            key={data.id}
             className="text-center border border-stone-300 rounded-md p-3"
           >
-            <p className="font-medium">{day}</p>
-            <p className="text-sm text-stone-500">9:00 AM - 5:00 PM</p>
+            <p className="font-medium">{data.day}</p>
+            <p className="text-sm text-stone-500">
+              {data.start_time} - {data.close_time}
+            </p>
           </div>
         ))}
       </div>

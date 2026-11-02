@@ -1,10 +1,97 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  createdAt DateTime   @default(now())
+  password  String
+  role      Role       @default(PATIENT)
+  status    UserStatus @default(ACTIVE)
+  updatedAt DateTime   @updatedAt
+  username  String     @unique
+  deletedAt DateTime?
+  patient   Patient?
+  doctor    doctor?
+}
+
+model Patient {
+  id                       String        @id @default(uuid())
+  userId                   String        @unique
+  first_name               String?
+  last_name                String?
+  date_of_birth            DateTime?
+  phone                    String?
+  marital_status           String?
+  address                  String?
+  emergency_contact_name   String?
+  emergency_contact_number String?
+  relation                 String?
+  blood_group              String?
+  allergies                String?
+  medical_conditions       String?
+  medical_history          String?
+  insurance_provider       String?
+  insurance_number         String?
+  privacy_consent          Boolean       @default(false)
+  service_consent          Boolean       @default(false)
+  medical_consent          Boolean       @default(false)
+  img                      String?
+  colorCode                String?
+  created_at               DateTime      @default(now())
+  updated_at               DateTime      @updatedAt
+  isOnboarded              Boolean       @default(false)
+  gender                   String?
+  appointments             Appointment[]
+  user                     User          @relation(fields: [userId], references: [id])
+}
+
+model doctor {
+  id                  String             @id @default(uuid())
+  userId              String             @unique
+  name                String
+  email               String             @unique
+  specialization      String
+  license_number      String
+  phone               String
+  address             String
+  department          String?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  availability_status AvailabilityStatus @default(AVAILABLE)
+  job_type            JobType            @default(FULL_TIME)
+  appointments        Appointment[]
+  workingDays         WorkingDays[]
+  user                User               @relation(fields: [userId], references: [id])
+}
+
+model WorkingDays {
+  id         String   @id @default(uuid())
+  doctor_id  String
+  day        String
+  start_time String
+  close_time String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  doctor     doctor   @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  patient_id      String
+  doctor_id       String
+  appointmentDate DateTime
+  time            String
+  status          AppointmentStatus @default(PENDING)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  doctor          doctor            @relation(fields: [doctor_id], references: [id])
+  patient         Patient           @relation(fields: [patient_id], references: [id])
 }
 
 enum Role {
@@ -39,94 +126,4 @@ enum JobType {
   FULL_TIME
   PART_TIME
   CONTRACT
-}
-
-model User {
-  id        String     @id @default(uuid())
-  username  String     @unique
-  email     String     @unique
-  password  String
-  role      Role       @default(PATIENT)
-  status    UserStatus @default(ACTIVE)
-  deletedAt DateTime?
-  patient   Patient?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  doctor    doctor?
-}
-
-model Patient {
-  id                       String    @id @default(uuid())
-  userId                   String    @unique
-  first_name               String?
-  last_name                String?
-  date_of_birth            DateTime?
-  gender                   String?
-  phone                    String?
-  marital_status           String?
-  address                  String?
-  emergency_contact_name   String?
-  emergency_contact_number String?
-  relation                 String?
-  privacy_consent          Boolean   @default(false)
-  service_consent          Boolean   @default(false)
-  medical_consent          Boolean   @default(false)
-  blood_group              String?
-  allergies                String?
-  medical_conditions       String?
-  medical_history          String?
-  insurance_provider       String?
-  insurance_number         String?
-  img                      String?
-  colorCode                String?
-  isOnboarded              Boolean   @default(false)
-  // user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  user                     User      @relation(fields: [userId], references: [id], onDelete: Restrict)
-
-  appointments Appointment[]
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-}
-
-model doctor {
-  id                  String             @id @default(uuid())
-  userId              String             @unique
-  name                String
-  email               String             @unique
-  specialization      String
-  license_number      String
-  phone               String
-  address             String
-  department          String?
-  availability_status AvailabilityStatus @default(AVAILABLE)
-  job_type            JobType            @default(FULL_TIME)
-  user                User               @relation(fields: [userId], references: [id], onDelete: Restrict)
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
-  workingDays         WorkingDays[]
-  appointments        Appointment[]
-}
-
-model WorkingDays {
-  id         String   @id @default(uuid())
-  doctor_id  String
-  day        String
-  start_time String
-  close_time String
-  doctor     doctor   @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
-model Appointment {
-  id              String            @id @default(uuid())
-  patient_id      String
-  doctor_id       String
-  appointmentDate DateTime
-  time            String
-  status          AppointmentStatus @default(PENDING)
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt
-  patient         Patient           @relation(fields: [patient_id], references: [id], onDelete: Restrict)
-  doctor          doctor            @relation(fields: [doctor_id], references: [id], onDelete: Restrict)
 }
