@@ -7,6 +7,7 @@ import {
   getAllDoctors,
   getAvailableDoctors,
   getDoctorById,
+  getDoctorWorkingDays,
   updateDoctor,
 } from "../controllers/doctorController.js";
 const router = express.Router();
@@ -17,5 +18,6 @@ router.get("/allDoctors/available", getAvailableDoctors);
 router.get("/:id", getDoctorById);
 router.patch("/updateDoctor/:id", updateDoctor);
 router.post("/working-days", addWorkingDays);
+router.get("/working-days/:doctorId", isAuthenticated, getDoctorWorkingDays);
 
 export default router;
