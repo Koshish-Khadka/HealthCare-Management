@@ -2,8 +2,14 @@ import Breadcrumbs from "../../components/common/BreadCrumbs";
 import { Eye, Plus, Search, SquarePen, Trash } from "lucide-react";
 import Table from "../../components/common/Table";
 import Badge from "../../components/ui/Badge";
+import { useState } from "react";
+import { useDoctor } from "../../context/doctorContext";
+import { usePatient } from "../../context/patientContent";
 
 const PatientAppointment = () => {
+  const [bookAppointment, setBookAppointment] = useState(false);
+  const { doctorData } = useDoctor();
+  const { patientData } = usePatient();
   const appointmentColumns = [
     {
       key: "Patient",
@@ -120,6 +126,10 @@ const PatientAppointment = () => {
     },
   ];
 
+  const bookAppointmentHandler = () => {
+    alert("Appointment booked successfully!");
+  };
+
   return (
     <div>
       <Breadcrumbs />
@@ -144,7 +154,7 @@ const PatientAppointment = () => {
           </div>
           <button
             className="flex cursor-pointer items-center gap-2 rounded-md border border-stone-300 bg-[#004B8D] px-4 py-1 text-white transition-colors duration-200 hover:bg-[#0764b5]"
-            // onClick={() => setBookAppointment(true)}
+            onClick={() => setBookAppointment(true)}
           >
             <Plus size={18} />
             Book Appointment
@@ -157,6 +167,108 @@ const PatientAppointment = () => {
         columns={appointmentColumns}
         // loading={loading}
       />
+      {bookAppointment && (
+        <div
+          onClick={() => setBookAppointment(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+        >
+          <div
+            className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Book Appointment
+                </h2>
+                <p className="mt-1 text-sm text-gray-500">
+                  Schedule an appointment with a doctor.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setBookAppointment(false)}
+                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            <form className="p-6" onSubmit={bookAppointmentHandler}>
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                {/* Doctor */}
+                <div className="col-span-2">
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Doctor
+                  </label>
+
+                  <select
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                    defaultValue=""
+                    name="doctorId"
+                    // onChange={handleInputChange}
+                  >
+                    <option value="" disabled>
+                      Select doctor
+                    </option>
+                    {doctorData.map((doctor) => (
+                      <option key={doctor.id} value={doctor.id}>
+                        {doctor.name} - {doctor.specialization}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Date */}
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Appointment Date
+                  </label>
+
+                  <input
+                    type="date"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                    name="appointmentDate"
+                    // onChange={handleInputChange}
+                  />
+                </div>
+
+                {/* Time */}
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Appointment Time
+                  </label>
+
+                  <input
+                    type="time"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                    name="time"
+                    // onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="mt-6 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setBookAppointment(false)}
+                  className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700"
+                >
+                  Book Appointment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

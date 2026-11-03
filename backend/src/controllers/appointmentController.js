@@ -1,4 +1,5 @@
 import { prisma } from "../config/prisma.js";
+import { format, parse,isBefore,addMinutes } from "date-fns";
 
 export const viewallAppointments = async (req, res) => {
   try {
@@ -144,6 +145,24 @@ export const bookAppointment = async (req, res) => {
       return res.status(404).json({ message: "All fields are required" });
     }
 
+    // Convert incoming date string to a proper DateTime for Prisma
+    const dbDate = new Date(`${appointmentDate}T00:00:00.000Z`);
+    // 1. Concurrency Check: Is the slot still open?
+    const existing = await prisma.appointment.findFirst({
+      where: {
+        doctor_id,
+        appointmentDate: dbDate,
+        time,
+        status: { not: "CANCELLED" },
+      },
+    });
+
+    if (existing) {
+      return res
+        .status(409)
+        .json({ message: "This time slot was just booked." });
+    }
+
     const patientExists = await prisma.patient.findUnique({
       where: { userId: userId },
     });
@@ -154,19 +173,20 @@ export const bookAppointment = async (req, res) => {
       });
     }
 
-   
-    const appointment = await prisma.appointment.create({
+    const newAppointment = await prisma.appointment.create({
       data: {
-        patient_id: patientExists.id, 
+        patient_id: patientExists.id,
         doctor_id,
-        appointmentDate,
+        appointmentDate: dbDate,
         time,
+        status: "PENDING",
       },
     });
 
-    res
-      .status(200)
-      .json({ message: "Appointment created successfully", appointment });
+    res.status(200).json({
+      message: "Appointment created successfully",
+      appointment: newAppointment,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Failed to book appointment " });
@@ -331,5 +351,59 @@ export const cancelAppointment = async (req, res) => {
     res.status(500).json({
       message: "Failed to cancel appointment",
     });
+  }
+};
+
+export const checkAppointmentSlots = async (req, res) => {
+  try {
+    const { doctor_id, date } = req.query;
+    console.log("The appointment date and id", date, doctor_id);
+    // 1. Get the day of the week (e.g., "Monday")
+    const dateObj = new Date(date);
+    const dayOfWeek = format(dateObj, "EEEE");
+    // 2. Fetch Doctor's working hours for this specific day
+    const workingDay = await prisma.workingDays.findFirst({
+      where: {
+        doctor_id: doctor_id,
+        day: dayOfWeek,
+      },
+    });
+    if (!workingDay) {
+      return res.json({ availableSlots: [] }); // Doctor doesn't work this day
+    }
+
+    // 3. Fetch existing appointments for this date
+    const bookedAppointments = await prisma.appointment.findMany({
+      where: {
+        doctor_id: doctor_id,
+        appointmentDate: {
+          gte: new Date(`${date}T00:00:00.000Z`),
+          lt: new Date(`${date}T23:59:59.999Z`),
+        },
+        status: { not: "CANCELLED" }, // Don't block cancelled slots
+      },
+      select: { time: true }, // We only need the time string (e.g., "10:30")
+    });
+    const bookedTimes = bookedAppointments.map((app) => app.time);
+    // 4. Generate Time Slots (e.g., every 30 minutes)
+    const availableSlots = [];
+    let currentTime = parse(workingDay.start_time, "HH:mm", new Date());
+    const endTime = parse(workingDay.close_time, "HH:mm", new Date());
+
+    while (isBefore(currentTime, endTime)) {
+      const timeString = format(currentTime, "HH:mm");
+
+      // If this time is not in the booked array, it's available
+      if (!bookedTimes.includes(timeString)) {
+        availableSlots.push(timeString);
+      }
+
+      currentTime = addMinutes(currentTime, 30); // 30-min intervals
+    }
+
+    res.json({ availableSlots });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to check appointment slots" });
   }
 };

@@ -62,6 +62,25 @@ export const createAppointment = async (req, res) => {
         message: "All fields are required",
       });
     }
+
+    // Convert incoming date string to a proper DateTime for Prisma
+    const dbDate = new Date(`${appointmentDate}T00:00:00.000Z`);
+    // 1. Concurrency Check: Is the slot still open?
+    const existing = await prisma.appointment.findFirst({
+      where: {
+        doctor_id,
+        appointmentDate: dbDate,
+        time,
+        status: { not: "CANCELLED" },
+      },
+    });
+
+    if (existing) {
+      return res
+        .status(409)
+        .json({ message: "This time slot was just booked." });
+    }
+
     const patient = await prisma.patient.findUnique({
       where: {
         id: patient_id,
@@ -74,18 +93,19 @@ export const createAppointment = async (req, res) => {
       });
     }
 
-    const appointment = await prisma.appointment.create({
+    const newAppointment = await prisma.appointment.create({
       data: {
         patient_id,
         doctor_id,
-        appointmentDate: new Date(appointmentDate),
+        appointmentDate: dbDate,
         time,
+        status: "PENDING",
       },
     });
 
     res.status(201).json({
       message: "Appointment created successfully",
-      appointment,
+      appointment: newAppointment,
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to create appointment", error });

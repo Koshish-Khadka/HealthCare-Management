@@ -3,6 +3,7 @@ import {
   appointmentHistory,
   bookAppointment,
   cancelAppointment,
+  checkAppointmentSlots,
   updateAppointment,
   viewallAppointments,
   viewAppointmentById,
@@ -19,5 +20,6 @@ router.get("/viewAppoiontment/:id", isAuthenticated, viewAppointmentById);
 router.patch("/updateAppointment/:id", updateAppointment);
 router.get("/getAppointmentHistory", appointmentHistory);
 router.post("/cancelAppointment", cancelAppointment);
+router.get("/available-slots",isAuthenticated,checkAppointmentSlots)
 
 export default router;

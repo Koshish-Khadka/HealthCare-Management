@@ -9,9 +9,11 @@ import DeletePopUp from "../../components/common/DeletePopUp";
 import Badge from "../../components/ui/Badge";
 const AdminAppointment = () => {
   const [allAppointment, setAllAppointment] = useState(null || []);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [bookAppointment, setBookAppointment] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   const [input, setInput] = useState({
     patientId: "",
@@ -90,17 +92,6 @@ const AdminAppointment = () => {
     alert("Patient deleted");
   };
 
-  // console.log(allAppointment);
-  const filterData = allAppointment.filter((data) =>
-    data?.doctor?.name.toLowerCase().includes(
-      searchQuery.toLowerCase(),
-      // ||
-      //   data?.patient?.first_name
-      //     .toLowerCase()
-      //     .includes(searchQuery.toLowerCase()),
-    ),
-  );
-
   const fetchAllAppointment = async () => {
     try {
       setLoading(true);
@@ -117,6 +108,36 @@ const AdminAppointment = () => {
     fetchAllAppointment();
   }, []);
 
+  useEffect(() => {
+    const fetchAvailableSlots = async () => {
+      // Only fetch if both doctor and date are selected
+      if (input.doctorId && input.appointmentDate) {
+        try {
+          setLoadingSlots(true);
+          const response = await api.get(`/appointment/available-slots`, {
+            params: {
+              doctor_id: input.doctorId,
+              date: input.appointmentDate,
+            },
+          });
+          setAvailableSlots(response.data.availableSlots);
+
+          // Reset the selected time if the date/doctor changes
+          setInput((prev) => ({ ...prev, time: "" }));
+        } catch (error) {
+          console.log("Failed to fetch slots", error);
+          setAvailableSlots([]);
+        } finally {
+          setLoadingSlots(false);
+        }
+      } else {
+        setAvailableSlots([]); // Clear slots if doctor/date is unselected
+      }
+    };
+
+    fetchAvailableSlots();
+  }, [input.doctorId, input.appointmentDate]);
+
   const formattedAppointments = allAppointment.map((appointment) => ({
     id: appointment.id,
     Patient: `${appointment.patient.first_name} ${appointment.patient.last_name}`,
@@ -127,6 +148,7 @@ const AdminAppointment = () => {
     phone: appointment.patient.phone,
     status: appointment.status,
   }));
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -138,6 +160,7 @@ const AdminAppointment = () => {
 
   const createAppointment = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await api.post("/admin/appointments", {
         patient_id: input.patientId,
@@ -151,9 +174,22 @@ const AdminAppointment = () => {
       fetchAllAppointment();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
-
+  const handleTimeSelect = (selectedTime) => {
+    setInput((prev) => ({ ...prev, time: selectedTime }));
+  };
+  const handleClose = () => {
+    setBookAppointment(false);
+    setInput({
+      patientId: "",
+      doctorId: "",
+      appointmentDate: "",
+      time: "",
+    });
+  };
   // console.log("All Apppointment", allAppointment);
   return (
     <div>
@@ -231,14 +267,14 @@ const AdminAppointment = () => {
                 ✕
               </button>
             </div>
+
             <form className="p-6" onSubmit={createAppointment}>
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                {/* Patient */}
+                {/* Patient Select */}
                 <div className="col-span-2">
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Patient
                   </label>
-
                   <select
                     className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                     defaultValue=""
@@ -256,12 +292,11 @@ const AdminAppointment = () => {
                   </select>
                 </div>
 
-                {/* Doctor */}
+                {/* Doctor Select */}
                 <div className="col-span-2">
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Doctor
                   </label>
-
                   <select
                     className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                     defaultValue=""
@@ -279,40 +314,67 @@ const AdminAppointment = () => {
                   </select>
                 </div>
 
-                {/* Date */}
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Appointment Date
-                  </label>
+                {/* PROGRESSIVE UI: Only show Date & Time if Doctor is selected */}
+                {input.doctorId && (
+                  <>
+                    <div className="col-span-2 border-t pt-4 mt-2">
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        Select Date
+                      </label>
+                      <input
+                        type="date"
+                        className="w-full md:w-1/2 rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                        name="appointmentDate"
+                        onChange={handleInputChange}
+                        min={new Date().toISOString().split("T")[0]} // Prevents picking past dates
+                      />
+                    </div>
 
-                  <input
-                    type="date"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                    name="appointmentDate"
-                    onChange={handleInputChange}
-                  />
-                </div>
+                    {/* Time Slot Grid (Only shows if Date is selected) */}
+                    {input.appointmentDate && (
+                      <div className="col-span-2">
+                        <label className="mb-3 block text-sm font-medium text-gray-700">
+                          Available Time Slots
+                        </label>
 
-                {/* Time */}
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Appointment Time
-                  </label>
-
-                  <input
-                    type="time"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                    name="time"
-                    onChange={handleInputChange}
-                  />
-                </div>
+                        {loadingSlots ? (
+                          <div className="text-sm text-blue-600 animate-pulse">
+                            Checking doctor's schedule...
+                          </div>
+                        ) : availableSlots.length > 0 ? (
+                          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                            {availableSlots.map((slotTime) => (
+                              <button
+                                key={slotTime}
+                                type="button"
+                                onClick={() => handleTimeSelect(slotTime)}
+                                className={`rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
+                                  input.time === slotTime
+                                    ? "bg-blue-600 border-blue-600 text-white shadow-md scale-105"
+                                    : "bg-white border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600"
+                                }`}
+                              >
+                                {slotTime}
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600 border border-red-100">
+                            Dr. is not available on this date or all slots are
+                            booked. Please select another date.
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
 
               {/* Footer */}
-              <div className="mt-6 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
+              <div className="mt-8 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
                 <button
                   type="button"
-                  onClick={() => setBookAppointment(false)}
+                  onClick={handleClose}
                   className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                 >
                   Cancel
@@ -320,9 +382,16 @@ const AdminAppointment = () => {
 
                 <button
                   type="submit"
-                  className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700"
+                  disabled={
+                    !input.patientId ||
+                    !input.doctorId ||
+                    !input.appointmentDate ||
+                    !input.time ||
+                    loading
+                  }
+                  className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed"
                 >
-                  Book Appointment
+                  {loading ? "Booking..." : "Confirm Booking"}
                 </button>
               </div>
             </form>
