@@ -5,11 +5,14 @@ import Badge from "../../components/ui/Badge";
 import { useState } from "react";
 import { useDoctor } from "../../context/doctorContext";
 import { usePatient } from "../../context/patientContent";
+import { useNavigate } from "react-router-dom";
 
 const PatientAppointment = () => {
   const [bookAppointment, setBookAppointment] = useState(false);
   const { doctorData } = useDoctor();
-  const { patientData } = usePatient();
+
+  const navigate = useNavigate();
+
   const appointmentColumns = [
     {
       key: "Patient",
@@ -154,7 +157,8 @@ const PatientAppointment = () => {
           </div>
           <button
             className="flex cursor-pointer items-center gap-2 rounded-md border border-stone-300 bg-[#004B8D] px-4 py-1 text-white transition-colors duration-200 hover:bg-[#0764b5]"
-            onClick={() => setBookAppointment(true)}
+            // onClick={() => setBookAppointment(true)}
+            onClick={() => navigate("/dashboard/findDoctor")}
           >
             <Plus size={18} />
             Book Appointment

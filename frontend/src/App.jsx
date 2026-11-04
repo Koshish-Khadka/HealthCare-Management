@@ -29,7 +29,7 @@ function App() {
     return (
       <div className="h-screen flex justify-center items-center">
         <Loader />
-      </div>
+    </div>
     );
   }
   // console.log("user detail", user);

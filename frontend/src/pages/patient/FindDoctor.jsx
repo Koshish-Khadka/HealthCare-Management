@@ -2,8 +2,11 @@ import React from "react";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 import FindDoctorCard from "../../components/ui/FindDoctorCard";
 import { Search } from "lucide-react";
+import { useDoctor } from "../../context/doctorContext";
 
 const FindDoctor = () => {
+  const { doctorData } = useDoctor();
+
   return (
     <div>
       <Breadcrumbs />
@@ -31,13 +34,9 @@ const FindDoctor = () => {
         </div>
         {/* Doctor card */}
         <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-3">
-          <FindDoctorCard />
-          <FindDoctorCard />
-          <FindDoctorCard />
-          <FindDoctorCard />
-          <FindDoctorCard />
-          <FindDoctorCard />
-          <FindDoctorCard />
+          {doctorData?.map((doctor) => (
+            <FindDoctorCard key={doctor._id} doctor={doctor} />
+          ))}
         </div>
       </div>
     </div>

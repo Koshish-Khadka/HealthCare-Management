@@ -21,7 +21,7 @@ export const DoctorProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    if (user?.role === "ADMIN") {
+    if (user?.role === "ADMIN" || user?.role === "PATIENT") {
       fetchALLDoctors();
     }
   }, [user]);

@@ -82,32 +82,6 @@ export const createDoctor = async (req, res) => {
   }
 };
 
-export const addWorkingDays = async (req, res) => {
-  try {
-    console.log("Working days controller");
-    const { doctor_id, schedule } = req.body;
-
-    // Optional: Delete existing days if this is an update rather than just onboarding
-    await prisma.workingDays.deleteMany({
-      where: { doctor_id: doctor_id },
-    });
-    const workingDaysData = schedule.map((slot) => ({
-      doctor_id: doctor_id,
-      day: slot.day,
-      start_time: slot.start_time,
-      close_time: slot.close_time,
-    }));
-    await prisma.workingDays.createMany({
-      data: workingDaysData,
-    });
-
-    res.status(201).json({ message: "Schedule saved successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Failed to add working days", error });
-  }
-};
-
 export const getAllDoctors = async (req, res) => {
   try {
     const doctors = await prisma.doctor.findMany();
@@ -123,6 +97,9 @@ export const getDoctorById = async (req, res) => {
     const { id } = req.params;
     const doctor = await prisma.doctor.findUnique({
       where: { id },
+      include: {
+        workingDays: true,
+      },
     });
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" });
@@ -206,5 +183,133 @@ export const getDoctorWorkingDays = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Failed to fetch working days", error });
+  }
+};
+
+// export const addProfessionalDetails = async (req, res) => {
+//   try {
+//     const { doctor_id, yearsExperience, workExperience, education, awards } =
+//       req.body;
+//     if (
+//       !doctor_id ||
+//       !yearsExperience ||
+//       !workExperience ||
+//       !education ||
+//       !awards
+//     ) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+//     // check if doctor exists
+//     const doctor = await prisma.doctor.findFirst({
+//       where: { id: doctor_id },
+//     });
+//     if (!doctor) {
+//       return res.status(404).json({ message: "Doctor not found" });
+//     }
+
+//     // check if professional details already exist for this doctor
+//     const existingDetails = await prisma.professionalDetails.findUnique({
+//       where: { doctor_id },
+//     });
+//     if (existingDetails) {
+//       return res
+//         .status(400)
+//         .json({
+//           message: "Professional details already exist for this doctor",
+//         });
+//     }
+
+//     const professionalDetails = await prisma.professionalDetails.create({
+//       data: {
+//         doctor_id,
+//         yearsExperience,
+//         workExperience,
+//         education,
+//         awards,
+//       },
+//     });
+
+//     res.status(201).json({
+//       message: "Professional details added successfully",
+//       professionalDetails,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res
+//       .status(500)
+//       .json({ message: "Failed to add professional details", error });
+//   }
+// };
+// export const addWorkingDays = async (req, res) => {
+//   try {
+//     console.log("Working days controller");
+//     const { doctor_id, schedule } = req.body;
+
+//     // Optional: Delete existing days if this is an update rather than just onboarding
+//     await prisma.workingDays.deleteMany({
+//       where: { doctor_id: doctor_id },
+//     });
+//     const workingDaysData = schedule.map((slot) => ({
+//       doctor_id: doctor_id,
+//       day: slot.day,
+//       start_time: slot.start_time,
+//       close_time: slot.close_time,
+//     }));
+//     await prisma.workingDays.createMany({
+//       data: workingDaysData,
+//     });
+
+//     res.status(201).json({ message: "Schedule saved successfully" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Failed to add working days", error });
+//   }
+// };
+
+export const onboardDoctor = async (req, res) => {
+  try {
+    const {
+      doctor_id,
+      yearsExperience,
+      workExperience,
+      education,
+      awards,
+      schedule,
+    } = req.body;
+
+    // Start the Prisma Transaction
+    await prisma.$transaction(async (tx) => {
+      // 1. Update the Doctor's professional details
+      await tx.doctor.update({
+        where: { id: doctor_id },
+        data: {
+          experience: Number(yearsExperience),
+          work_experience: workExperience,
+          education,
+          memberships_awards: awards,
+        },
+      });
+
+      // 2. Create the Working Days
+      const workingDaysData = schedule.map((slot) => ({
+        doctor_id: doctor_id,
+        day: slot.day,
+        start_time: slot.start_time,
+        close_time: slot.close_time,
+      }));
+
+      await tx.workingDays.createMany({
+        data: workingDaysData,
+      });
+    });
+    // If the code reaches this line, BOTH queries succeeded and are permanently saved.
+
+    res.status(200).json({ message: "Doctor onboarded successfully" });
+  } catch (error) {
+    console.error(error);
+    // If ANY query fails, Prisma rolls back automatically and jumps to this catch block.
+    res
+      .status(500)
+      .json({ message: "Failed to complete onboarding", error: error.message });
   }
 };
