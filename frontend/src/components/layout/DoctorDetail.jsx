@@ -6,9 +6,8 @@ import { useAuth } from "../../context/authContext";
 import { useParams } from "react-router-dom";
 import Breadcrumbs from "../../components/common/BreadCrumbs";
 
-const DoctorDetail = () => {
+const DoctorDetail = ({ doctorId }) => {
   const { user } = useAuth();
-  const { doctorId } = useParams();
 
   const [doctorScheduleData, setDoctorScheduleData] = useState([]);
   const [doctor, setDoctor] = useState(null);
@@ -196,9 +195,12 @@ const DoctorDetail = () => {
               Work Experience
             </h2>
             <div
-              className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+              className="prose prose-sm max-w-none text-gray-700 leading-relaxed break-words"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(doctor.work_experience),
+                // Replace all &nbsp; with a standard space before sanitizing
+                __html: DOMPurify.sanitize(
+                  doctor.education.replace(/&nbsp;/g, " "),
+                ),
               }}
             />
           </div>
@@ -211,9 +213,12 @@ const DoctorDetail = () => {
               Education & Training
             </h2>
             <div
-              className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+              className="prose prose-sm max-w-none text-gray-700 leading-relaxed break-words"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(doctor.education),
+                // Replace all &nbsp; with a standard space before sanitizing
+                __html: DOMPurify.sanitize(
+                  doctor.education.replace(/&nbsp;/g, " "),
+                ),
               }}
             />
           </div>
@@ -226,9 +231,12 @@ const DoctorDetail = () => {
               Memberships & Awards
             </h2>
             <div
-              className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+              className="prose prose-sm max-w-none text-gray-700 leading-relaxed break-words"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(doctor.memberships_awards),
+                // Replace all &nbsp; with a standard space before sanitizing
+                __html: DOMPurify.sanitize(
+                  doctor.education.replace(/&nbsp;/g, " "),
+                ),
               }}
             />
           </div>

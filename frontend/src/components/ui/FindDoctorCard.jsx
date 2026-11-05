@@ -58,7 +58,7 @@ const FindDoctorCard = ({ doctor, key }) => {
         type="button"
         className="mt-5 w-full rounded-lg bg-[#004B8D] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#00396B] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
-        <Link to={`/dashboard/doctors/${doctor.id}`}>View Profile</Link>
+        <Link to={`/dashboard/findDoctor/${doctor.id}`}>View Profile</Link>
       </button>
     </div>
   );
