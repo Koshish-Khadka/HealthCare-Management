@@ -34,7 +34,7 @@ function App() {
       </div>
     );
   }
-  // console.log("user detail", user);
+  console.log("user detail", user);
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
